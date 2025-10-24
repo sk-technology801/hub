@@ -481,7 +481,6 @@
 // export default AutoServiceContact;
 
 
-
 "use client";
 import React, { useState, useEffect } from 'react';
 import {
@@ -502,7 +501,7 @@ const AutoServiceContact = () => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState(''); // Changed from submitted to status for consistency
 
   useEffect(() => {
     setIsVisible(true);
@@ -515,25 +514,23 @@ const AutoServiceContact = () => {
     });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Add preventDefault to stop form default behavior
     setIsSubmitting(true);
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
+    setStatus("Sending...");
 
-      if (res.ok) {
-        console.log("Form data saved to MongoDB");
-        setSubmitted(true);
-        setFormData({ name: '', email: '', phone: '', service: '', message: '' });
-        setTimeout(() => setSubmitted(false), 3000);
-      } else {
-        console.error("Failed to submit data");
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    if (res.ok) {
+      setStatus("✅ Message sent successfully!");
+      setFormData({ name: '', email: '', phone: '', service: '', message: '' });
+      setTimeout(() => setStatus(''), 3000); // Clear status after 3 seconds
+    } else {
+      setStatus("❌ Failed to send message");
     }
     setIsSubmitting(false);
   };
@@ -575,14 +572,13 @@ const AutoServiceContact = () => {
               <div className="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-yellow-400 transition-all duration-300">
                 <h3 className="text-2xl font-bold mb-6 text-yellow-400">Send Us a Message</h3>
 
-                {submitted ? (
+                {status ? (
                   <div className="text-center py-8 animate-fadeInUp">
                     <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4 animate-bounce" />
-                    <h4 className="text-xl font-semibold mb-2 text-green-400">Message Sent!</h4>
-                    <p className="text-gray-300">Thank you for contacting us. We'll get back to you soon!</p>
+                    <p className="text-gray-300">{status}</p>
                   </div>
                 ) : (
-                  <div className="space-y-6">
+                  <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="relative group">
                         <User className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -650,7 +646,7 @@ const AutoServiceContact = () => {
                     </div>
 
                     <button
-                      onClick={handleSubmit}
+                      type="submit"
                       disabled={isSubmitting}
                       className="w-full bg-yellow-400 text-black py-3 px-6 rounded-lg font-semibold hover:bg-yellow-500 transition-all duration-300"
                     >
@@ -661,12 +657,12 @@ const AutoServiceContact = () => {
                         </span>
                       )}
                     </button>
-                  </div>
+                  </form>
                 )}
               </div>
             </div>
 
-            {/* Business Info (optional, already included in your previous code) */}
+            {/* Business Info */}
             <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
               <div className="bg-gray-800 p-6 rounded-xl border border-gray-700 hover:border-yellow-400">
                 <div className="flex items-center gap-3 mb-6">
