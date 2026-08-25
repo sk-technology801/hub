@@ -1,310 +1,228 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { Phone, Clock, MapPin, Wrench, Car, Shield, Zap, CheckCircle, Star, ArrowRight, Menu, X } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { 
+  Phone, AlertTriangle, Clock, MapPin, ShieldCheck, 
+  Sparkles, ArrowRight, Radio, Navigation, CheckCircle2, 
+  Truck, Activity, Zap 
+} from "lucide-react";
+import { 
+  MotionFadeUp, MotionSlideLeft, MotionSlideRight, 
+  MotionZoomPop, MotionFlip3D, MotionStaggerContainer, 
+  MotionStaggerItem 
+} from "../components/motion-wrapper";
 
-const EmergencyCarServices = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeService, setActiveService] = useState(0);
-  const [scrollY, setScrollY] = useState(0);
+export default function EmergencyPage() {
+  const [etaMinutes, setEtaMinutes] = useState(16);
+  const [proximityMiles, setProximityMiles] = useState(2.4);
+  const [isDispatched, setIsDispatched] = useState(true);
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    if (!isDispatched) return;
+    const interval = setInterval(() => {
+      setEtaMinutes((prev) => (prev > 5 ? prev - 1 : 18));
+      setProximityMiles((prev) => (prev > 0.6 ? +(prev - 0.2).toFixed(1) : 2.8));
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [isDispatched]);
 
-  const services = [
+  const emergencyServices = [
     {
-      icon: <Car className="w-8 h-8" />,
-      title: "24/7 Roadside Assistance",
-      description: "Emergency towing and roadside support whenever you need it"
+      title: "Flatbed Towing & Recovery",
+      desc: "Damage-free wheel-lift and flatbed towing for exotic, AWD, low-clearance, and standard vehicles.",
+      eta: "15-20 mins",
+      badge: "Heavy Duty"
     },
     {
-      icon: <Wrench className="w-8 h-8" />,
-      title: "Mobile Mechanics",
-      description: "Professional mechanics come to your location for repairs"
+      title: "Mobile Jump-Start & Alternator",
+      desc: "Commercial 12V/24V booster packs, battery load testing, and on-the-spot battery replacement.",
+      eta: "10-15 mins",
+      badge: "High Priority"
     },
     {
-      icon: <Zap className="w-8 h-8" />,
-      title: "Jump Start Service",
-      description: "Dead battery? We'll get you back on the road quickly"
+      title: "Emergency Flat Tire Swap",
+      desc: "Rapid on-site spare installation, high-pressure tire inflation, or plug repair on the shoulder.",
+      eta: "15-20 mins",
+      badge: "Rapid Response"
     },
     {
-      icon: <Shield className="w-8 h-8" />,
-      title: "Lockout Service",
-      description: "Locked out of your car? We provide safe key retrieval"
+      title: "Emergency Fuel Delivery & Lockout",
+      desc: "5 gallons of premium/diesel delivered directly to your stranded location plus damage-free lockout.",
+      eta: "12-18 mins",
+      badge: "24/7 Mobile"
     }
   ];
-
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      rating: 5,
-      text: "Incredible service! They arrived within 20 minutes and fixed my car on the spot."
-    },
-    {
-      name: "Mike Chen",
-      rating: 5,
-      text: "Professional, fast, and affordable. Highly recommend their emergency services."
-    },
-    {
-      name: "Emily Davis",
-      rating: 5,
-      text: "Saved my day when I was stranded. The technician was skilled and friendly."
-    }
-  ];
-
-  // Generate stars for background
-  const generateStars = (count) => {
-    return Array.from({ length: count }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      size: Math.random() * 3 + 1,
-      duration: Math.random() * 3 + 2,
-      delay: Math.random() * 2
-    }));
-  };
-
-  const stars = generateStars(100);
 
   return (
-    <div className="bg-black text-white min-h-screen overflow-hidden relative">
-      {/* Animated Star Background */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {stars.map((star) => (
-          <div
-            key={star.id}
-            className="absolute bg-yellow-400 rounded-full animate-star-twinkle"
-            style={{
-              left: `${star.x}%`,
-              top: `${star.y}%`,
-              width: `${star.size}px`,
-              height: `${star.size}px`,
-              animationDuration: `${star.duration}s`,
-              animationDelay: `${star.delay}s`,
-              opacity: 0.6
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-6">
-        <div className="container mx-auto text-center">
-          <div className="mb-8 animate-fade-in">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              Emergency
-              <span className="text-yellow-400 block animate-pulse">Auto Services</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-              Stranded? Don't panic! Our expert technicians are ready to rescue you 24/7 with fast, reliable emergency auto services.
-            </p>
-          </div>
-
-          <div className="flex flex-col md:flex-row gap-4 justify-center mb-12">
-            <a href="/contact">
-            <button className="bg-yellow-400 text-black px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-all duration-300 transform hover:scale-105 hover:shadow-lg flex items-center justify-center group">
-              <Phone className="w-5 h-5 mr-2 group-hover:animate-bounce" />
-              Call Now: (555) 123-HELP
-            </button>
-            </a>
-            <a href="/get-quote">
-            <button className="border-2 border-yellow-400 text-yellow-400 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-400 hover:text-black transition-all duration-300 transform hover:scale-105 flex items-center justify-center group">
-              Get Quote
-              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-            </button>
-            </a>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {[
-              { number: '24/7', label: 'Available' },
-              { number: '15min', label: 'Avg Response' },
-              { number: '1000+', label: 'Cars Rescued' },
-              { number: '5★', label: 'Rating' }
-            ].map((stat, index) => (
-              <div key={index} className="animate-fade-in-up" style={{ animationDelay: `${index * 0.2}s` }}>
-                <div className="text-3xl md:text-4xl font-bold text-yellow-400 mb-2">{stat.number}</div>
-                <div className="text-gray-400">{stat.label}</div>
-              </div>
-            ))}
-          </div>
+    <div className="bg-[#080c14] text-gray-100 min-h-screen pt-32 sm:pt-36 pb-20 overflow-hidden">
+      
+      {/* Hero Section (FADE UP) */}
+      <MotionFadeUp className="relative px-4 sm:px-6 lg:px-8 pb-12 text-center max-w-4xl mx-auto">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-red-500/10 blur-[120px] rounded-full pointer-events-none" />
+        
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-red-500/10 border border-red-500/25 text-red-400 text-xs sm:text-sm font-semibold mb-6 animate-pulse">
+          <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+          <span>24/7 Priority Emergency Dispatch</span>
         </div>
 
-        {/* Floating Elements */}
-        <div className="absolute top-20 left-10 animate-float">
-          <div className="w-16 h-16 bg-yellow-400/20 rounded-full flex items-center justify-center">
-            <Clock className="w-8 h-8 text-yellow-400" />
-          </div>
-        </div>
-        <div className="absolute bottom-40 right-10 animate-float-delayed">
-          <div className="w-12 h-12 bg-yellow-400/20 rounded-full flex items-center justify-center">
-            <MapPin className="w-6 h-6 text-yellow-400" />
-          </div>
-        </div>
-      </section>
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">
+          Stranded on the Road? <br />
+          <span className="gold-gradient-text">Immediate Help is En Route</span>.
+        </h1>
 
-      {/* Services Section */}
-      <section id="services" className="py-20 relative">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Our <span className="text-yellow-400">Emergency Services</span>
-            </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Professional automotive emergency services available around the clock to get you back on the road
-            </p>
-          </div>
+        <p className="text-base sm:text-lg text-gray-300 mt-4 max-w-2xl mx-auto leading-relaxed">
+          Our GPS-tracked mobile service trucks and damage-free flatbed tow units operate 24 hours a day, 7 days a week with rapid metropolitan response.
+        </p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {services.map((service, index) => (
-              <div
-                key={index}
-                className={`bg-white/5 backdrop-blur-sm rounded-xl p-6 hover:bg-white/10 transition-all duration-300 transform hover:scale-105 cursor-pointer border border-white/10 ${
-                  activeService === index ? 'border-yellow-400 bg-yellow-400/10' : ''
-                }`}
-                onMouseEnter={() => setActiveService(index)}
-              >
-                <div className="text-yellow-400 mb-4 transform transition-transform hover:scale-110">
-                  {service.icon}
-                </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">{service.title}</h3>
-                <p className="text-gray-300">{service.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Process Section */}
-      <section className="py-20 bg-white/5">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              How It <span className="text-yellow-400">Works</span>
-            </h2>
-            <p className="text-xl text-gray-300">Simple steps to get emergency help</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { step: '01', title: 'Call Us', description: 'Contact our 24/7 hotline and describe your emergency' },
-              { step: '02', title: 'We Dispatch', description: 'Our nearest technician is immediately dispatched to your location' },
-              { step: '03', title: 'Problem Solved', description: 'Expert service gets you back on the road quickly and safely' }
-            ].map((item, index) => (
-              <div key={index} className="text-center group">
-                <div className="w-20 h-20 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-6 text-black font-bold text-xl group-hover:scale-110 transition-transform duration-300">
-                  {item.step}
-                </div>
-                <h3 className="text-2xl font-semibold mb-4 text-white">{item.title}</h3>
-                <p className="text-gray-300">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-20">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              What Our <span className="text-yellow-400">Customers Say</span>
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white/5 backdrop-blur-sm rounded-xl p-6 hover:bg-white/10 transition-all duration-300 transform hover:scale-105">
-                <div className="flex mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-300 mb-4 italic">"{testimonial.text}"</p>
-                <div className="font-semibold text-yellow-400">{testimonial.name}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-yellow-400 text-black">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Need Emergency Auto Service?
-          </h2>
-          <p className="text-xl mb-8 opacity-80">
-            Don't wait - our expert technicians are standing by 24/7 to help you
-          </p>
-          <a href="/contact">
-          <button className="bg-black text-yellow-400 px-8 py-4 rounded-lg font-semibold hover:bg-gray-900 transition-all duration-300 transform hover:scale-105 text-xl">
-            <Phone className="w-6 h-6 mr-2 inline" />
-            Call (555) 123-HELP Now
-          </button>
+        {/* 1-Click Call Hotline */}
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8">
+          <a
+            href="tel:+15551234567"
+            className="w-full sm:w-auto px-10 py-5 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-black text-lg flex items-center justify-center space-x-3 shadow-2xl shadow-red-600/40 hover:scale-105 transition-all"
+          >
+            <Phone className="w-6 h-6 animate-bounce" />
+            <span>Call 24/7 Hotline: (555) 123-4567</span>
           </a>
+          <Link
+            href="/contact"
+            className="outline-glow-btn px-7 py-5 rounded-2xl font-bold text-sm"
+          >
+            Request Online Dispatch
+          </Link>
         </div>
+      </MotionFadeUp>
+
+      {/* INTERACTIVE GPS RADAR DISPATCH HUD (ZOOM POP) */}
+      <MotionZoomPop className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="glass-card rounded-3xl p-6 sm:p-8 border-red-500/30 shadow-2xl">
+          
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 mb-6 border-b border-gray-800 gap-4">
+            <div>
+              <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-red-400 uppercase tracking-wider">
+                <Radio className="w-4 h-4 animate-ping" />
+                <span>Live GPS Roadside Dispatch Telemetry</span>
+              </div>
+              <h2 className="text-2xl font-extrabold text-white mt-1">
+                Active Fleet Radar & Response Proximity
+              </h2>
+            </div>
+            
+            <div className="flex items-center gap-2 bg-gray-950 p-2 rounded-2xl border border-gray-800 text-xs">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+              <span className="font-bold text-white">Tow Unit #04 Active</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            {/* Visual Radar Screen */}
+            <div className="lg:col-span-7 relative h-72 rounded-2xl bg-gray-950 border border-gray-800 p-4 flex items-center justify-center overflow-hidden shadow-2xl">
+              
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-64 h-64 rounded-full border border-emerald-500/20" />
+                <div className="w-48 h-48 rounded-full border border-emerald-500/30" />
+                <div className="w-32 h-32 rounded-full border border-emerald-500/40" />
+                <div className="w-16 h-16 rounded-full border border-emerald-500/50" />
+                <div className="w-full h-px bg-emerald-500/20" />
+                <div className="h-full w-px bg-emerald-500/20 absolute" />
+              </div>
+
+              {/* Rotating Radar Sweep Line */}
+              <div 
+                className="absolute w-64 h-64 rounded-full pointer-events-none"
+                style={{
+                  background: 'conic-gradient(from 0deg at 50% 50%, rgba(16, 185, 129, 0.4) 0deg, transparent 60deg, transparent 360deg)',
+                  animation: 'spin 4s linear infinite'
+                }}
+              />
+
+              {/* Stranded Vehicle Marker */}
+              <div className="absolute z-20 flex flex-col items-center">
+                <div className="w-4 h-4 rounded-full bg-red-500 border-2 border-white animate-ping" />
+                <span className="text-[10px] font-bold text-red-400 bg-black/80 px-1.5 py-0.5 rounded mt-1">Your Car</span>
+              </div>
+
+              {/* Moving Tow Truck Marker */}
+              <div 
+                className="absolute z-20 flex flex-col items-center transition-all duration-1000"
+                style={{
+                  top: '32%',
+                  left: '64%'
+                }}
+              >
+                <div className="w-5 h-5 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center text-[10px] text-black font-black shadow-lg shadow-emerald-500/50">
+                  🚚
+                </div>
+                <span className="text-[10px] font-bold text-emerald-400 bg-black/80 px-1.5 py-0.5 rounded mt-1">
+                  Unit #04 ({proximityMiles} mi)
+                </span>
+              </div>
+
+              {/* Bottom Radar Overlay */}
+              <div className="absolute bottom-3 left-4 right-4 flex justify-between items-center bg-gray-950/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-gray-800 text-xs font-mono">
+                <span className="text-gray-300">
+                  Estimated ETA: <strong className="text-emerald-400 text-sm font-black">{etaMinutes} MINS</strong>
+                </span>
+                <span className="text-gray-300">
+                  Distance: <strong className="text-amber-400">{proximityMiles} Miles</strong>
+                </span>
+              </div>
+
+            </div>
+
+            {/* Quick Dispatch Telemetry Summary */}
+            <div className="lg:col-span-5 space-y-4">
+              <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 space-y-3 text-xs">
+                <div className="flex justify-between text-gray-300">
+                  <span>GPS Tracking Accuracy:</span>
+                  <strong className="text-emerald-400">Sub-Meter Precision</strong>
+                </div>
+                <div className="flex justify-between text-gray-300">
+                  <span>Flatbed Tow Equipment:</span>
+                  <strong className="text-white">Hydraulic Soft-Strap Tie</strong>
+                </div>
+                <div className="flex justify-between text-gray-300">
+                  <span>Coverage Territory:</span>
+                  <strong className="text-white">Metropolitan 50-Mile Radius</strong>
+                </div>
+              </div>
+
+              <a
+                href="tel:+15551234567"
+                className="gold-glow-btn w-full py-3.5 rounded-xl text-center text-xs font-bold flex items-center justify-center space-x-2"
+              >
+                <Phone className="w-4 h-4 text-black" />
+                <span>Confirm Immediate Tow Request</span>
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+      </MotionZoomPop>
+
+      {/* Emergency Services Grid (STAGGERED CONTAINER) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <MotionStaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {emergencyServices.map((srv, idx) => (
+            <MotionStaggerItem key={idx} className="glass-card rounded-3xl p-6 border-gray-800 flex flex-col justify-between">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 mb-3 inline-block">
+                  {srv.badge}
+                </span>
+                <h3 className="text-lg font-bold text-white mb-2">{srv.title}</h3>
+                <p className="text-xs text-gray-300 leading-relaxed mb-4">{srv.desc}</p>
+              </div>
+
+              <div className="pt-3 border-t border-gray-800 flex items-center justify-between text-xs">
+                <span className="text-gray-400">Avg Arrival:</span>
+                <strong className="text-emerald-400 font-bold">{srv.eta}</strong>
+              </div>
+            </MotionStaggerItem>
+          ))}
+        </MotionStaggerContainer>
       </section>
 
-      <style jsx>{`
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes fade-in-up {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-20px); }
-        }
-        
-        @keyframes float-delayed {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-15px); }
-        }
-        
-        @keyframes star-twinkle {
-          0%, 100% { 
-            opacity: 0.3; 
-            transform: scale(1); 
-          }
-          50% { 
-            opacity: 1; 
-            transform: scale(1.2); 
-          }
-        }
-        
-        .animate-fade-in {
-          animation: fade-in 0.8s ease-out;
-        }
-        
-        .animate-fade-in-up {
-          animation: fade-in-up 0.8s ease-out forwards;
-          opacity: 0;
-        }
-        
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-        
-        .animate-float-delayed {
-          animation: float-delayed 3s ease-in-out infinite;
-          animation-delay: 1s;
-        }
-        
-        .animate-star-twinkle {
-          animation: star-twinkle 2s ease-in-out infinite;
-        }
-      `}</style>
     </div>
   );
-};
-
-export default EmergencyCarServices;
+}

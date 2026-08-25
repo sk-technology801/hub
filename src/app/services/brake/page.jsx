@@ -1,537 +1,316 @@
-'use client';
-
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+"use client";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { 
-  Settings, 
-  Shield, 
-  AlertTriangle, 
-  CheckCircle, 
-  Clock, 
-  Wrench,
-  Car,
-  Zap,
-  Award,
-  Phone,
-  Calendar,
-  ArrowRight,
-  Play,
-  Pause,
-  RotateCcw
-} from 'lucide-react';
+  ShieldCheck, Wrench, CheckCircle2, Sparkles, 
+  ArrowRight, Phone, AlertTriangle, Disc, Play, 
+  Pause, RotateCcw, Activity, Thermometer, Gauge, Flame 
+} from "lucide-react";
 
-const BrakeServicePage = () => {
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [selectedService, setSelectedService] = useState(null);
-  const [brakeWearLevel, setBrakeWearLevel] = useState(30);
-  const [showAnimation, setShowAnimation] = useState(false);
+export default function BrakeServicePage() {
+  const [activePlan, setActivePlan] = useState(1);
 
-  // Auto-cycle brake wear animation
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (showAnimation) {
-        setBrakeWearLevel(prev => {
-          const newLevel = prev + 10;
-          return newLevel > 90 ? 10 : newLevel;
-        });
-      }
-    }, 1500);
+  // Interactive Brake Rotor & Clamping Simulator States
+  const [rotorSpeedRpm, setRotorSpeedRpm] = useState(2400);
+  const [brakePressurePercent, setBrakePressurePercent] = useState(65);
+  const [isRotating, setIsRotating] = useState(true);
+  const [padMaterial, setPadMaterial] = useState("ceramic");
 
-    return () => clearInterval(interval);
-  }, [showAnimation]);
+  const rotorTempC = Math.round(80 + (brakePressurePercent / 100) * 580);
+  const stoppingDistanceFt = Math.max(105, Math.round(180 - (brakePressurePercent / 100) * 60 + (padMaterial === "worn" ? 55 : padMaterial === "metallic" ? 15 : 0)));
+  const isHighFriction = brakePressurePercent > 40;
 
-  const services = [
+  const packages = [
     {
-      id: 1,
-      title: "Complete Brake Inspection",
-      description: "Comprehensive 47-point brake system analysis",
-      price: "$89",
-      duration: "30 min",
-      features: ["Brake pad thickness measurement", "Rotor surface inspection", "Brake fluid analysis", "Caliper function test"],
-      color: "from-yellow-400 to-yellow-500"
+      title: "Complete Brake Safety Inspection",
+      price: "$49",
+      time: "30 mins",
+      desc: "Digital laser micrometer measurement of pad thickness, rotor runout, and boiling point test.",
+      features: [
+        "Digital caliper pad thickness check",
+        "Rotor surface warpage & heat check",
+        "Brake fluid moisture content analysis",
+        "Hydraulic line & hose inspection"
+      ]
     },
     {
-      id: 2,
-      title: "Brake Pad Replacement",
-      description: "Premium brake pads with lifetime warranty",
-      price: "$299",
-      duration: "90 min",
-      features: ["High-performance brake pads", "Rotor resurfacing", "Brake fluid top-off", "Road test included"],
-      color: "from-black to-gray-800"
+      title: "Ceramic Brake Pad & Rotor Service",
+      price: "$149",
+      time: "1-2 hours",
+      desc: "Ultra-quiet, dust-free ceramic pad install, rotor resurfacing, and hardware replacement.",
+      features: [
+        "Premium ceramic low-dust pads",
+        "Precision rotor resurfacing / truing",
+        "New stainless steel guide clips & springs",
+        "Caliper slide pin synthetic lubrication",
+        "24-Month / 24,000-Mile Warranty"
+      ]
     },
     {
-      id: 3,
-      title: "Complete Brake Service",
-      description: "Full brake system overhaul and optimization",
-      price: "$599",
-      duration: "3 hours",
-      features: ["New brake pads & rotors", "Brake fluid flush", "Caliper service", "Performance optimization"],
-      color: "from-yellow-500 to-yellow-600"
-    },
-    {
-      id: 4,
-      title: "Emergency Brake Repair",
-      description: "Same-day brake repairs for safety issues",
-      price: "$199",
-      duration: "60 min",
-      features: ["Immediate safety assessment", "Quick repair solutions", "Temporary fixes available", "Priority service"],
-      color: "from-gray-800 to-black"
+      title: "Complete 4-Wheel Overhaul & Flush",
+      price: "$349",
+      time: "2-3 hours",
+      desc: "Brand-new anti-corrosion coated rotors, front & rear ceramic pads, and DOT4 pressure bleed.",
+      features: [
+        "4x Coated anti-rust vented rotors",
+        "Front & rear high-performance ceramic pads",
+        "Full pressurized hydraulic fluid flush",
+        "Electronic parking brake (EPB) recalibration",
+        "Road test bed-in & stopping distance certification"
+      ]
     }
   ];
 
-  const warningSignals = [
-    { icon: <AlertTriangle className="w-6 h-6" />, text: "Squealing or grinding noises", severity: "high" },
-    { icon: <AlertTriangle className="w-6 h-6" />, text: "Vibrations when braking", severity: "medium" },
-    { icon: <AlertTriangle className="w-6 h-6" />, text: "Soft or spongy brake pedal", severity: "high" },
-    { icon: <AlertTriangle className="w-6 h-6" />, text: "Brake warning light", severity: "high" },
-    { icon: <AlertTriangle className="w-6 h-6" />, text: "Burning smell after braking", severity: "medium" },
-    { icon: <AlertTriangle className="w-6 h-6" />, text: "Car pulls to one side", severity: "medium" }
-  ];
-
-  const BrakeSystemVisualization = () => (
-    <div className="relative w-full h-96 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl p-8 overflow-hidden border border-gray-300 shadow-2xl">
-      <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-yellow-500/20 animate-pulse"></div>
-      
-      {/* Brake Disc */}
-      <motion.div
-        className="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2"
-        animate={{ rotate: showAnimation ? 360 : 0 }}
-        transition={{ duration: 3, repeat: showAnimation ? Infinity : 0, ease: "linear" }}
-      >
-        <div className="w-32 h-32 border-8 border-gray-600 rounded-full relative shadow-lg">
-          <div className="absolute inset-2 border-4 border-gray-700 rounded-full">
-            <div className="absolute inset-2 bg-gradient-to-r from-gray-600 to-gray-700 rounded-full"></div>
-          </div>
-          {/* Brake disc holes */}
-          {[...Array(8)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-2 h-2 bg-white rounded-full shadow-inner"
-              style={{
-                top: `${50 + 30 * Math.sin(i * Math.PI / 4)}%`,
-                left: `${50 + 30 * Math.cos(i * Math.PI / 4)}%`,
-                transform: 'translate(-50%, -50%)'
-              }}
-            />
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Brake Pads */}
-      <div className="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2">
-        <motion.div
-          className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-12 h-6 rounded shadow-lg"
-          style={{
-            background: `linear-gradient(to right, 
-              ${brakeWearLevel > 70 ? '#dc2626' : brakeWearLevel > 40 ? '#eab308' : '#16a34a'} 0%, 
-              ${brakeWearLevel > 70 ? '#dc2626' : brakeWearLevel > 40 ? '#eab308' : '#16a34a'} ${100 - brakeWearLevel}%, 
-              #4b5563 ${100 - brakeWearLevel}%, 
-              #4b5563 100%)`
-          }}
-          animate={{ scale: showAnimation ? [1, 1.1, 1] : 1 }}
-          transition={{ duration: 1.5, repeat: showAnimation ? Infinity : 0 }}
-        />
-        <motion.div
-          className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 w-12 h-6 rounded shadow-lg"
-          style={{
-            background: `linear-gradient(to right, 
-              ${brakeWearLevel > 70 ? '#dc2626' : brakeWearLevel > 40 ? '#eab308' : '#16a34a'} 0%, 
-              ${brakeWearLevel > 70 ? '#dc2626' : brakeWearLevel > 40 ? '#eab308' : '#16a34a'} ${100 - brakeWearLevel}%, 
-              #4b5563 ${100 - brakeWearLevel}%, 
-              #4b5563 100%)`
-          }}
-          animate={{ scale: showAnimation ? [1, 1.1, 1] : 1 }}
-          transition={{ duration: 1.5, repeat: showAnimation ? Infinity : 0 }}
-        />
-      </div>
-
-      {/* Brake Caliper */}
-      <div className="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2">
-        <div className="absolute -left-8 -top-6 w-16 h-12 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg shadow-lg border border-yellow-600">
-          <div className="absolute inset-1 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded"></div>
-        </div>
-      </div>
-
-      {/* Brake Fluid Lines */}
-      <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        <motion.path
-          d="M200 200 Q300 150 400 200"
-          stroke="url(#fluidGradient)"
-          strokeWidth="4"
-          fill="none"
-          strokeDasharray="8,4"
-          animate={{ strokeDashoffset: showAnimation ? [0, -24] : 0 }}
-          transition={{ duration: 1, repeat: showAnimation ? Infinity : 0, ease: "linear" }}
-        />
-        <defs>
-          <linearGradient id="fluidGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#eab308" />
-            <stop offset="100%" stopColor="#f59e0b" />
-          </linearGradient>
-        </defs>
-      </svg>
-
-      {/* Control Panel */}
-      <div className="absolute bottom-4 right-4 flex gap-2">
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setShowAnimation(!showAnimation)}
-          className="p-3 bg-white/80 backdrop-blur-sm rounded-full text-black hover:bg-white/90 transition-all shadow-lg border border-gray-300"
-        >
-          {showAnimation ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-        </motion.button>
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setBrakeWearLevel(10)}
-          className="p-3 bg-white/80 backdrop-blur-sm rounded-full text-black hover:bg-white/90 transition-all shadow-lg border border-gray-300"
-        >
-          <RotateCcw className="w-5 h-5" />
-        </motion.button>
-      </div>
-
-      {/* Wear Level Indicator */}
-      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-4 text-black border border-gray-300 shadow-lg">
-        <div className="text-sm font-medium mb-2">Brake Pad Wear</div>
-        <div className="flex items-center gap-2">
-          <div className="w-20 h-2 bg-gray-300 rounded-full overflow-hidden">
-            <motion.div
-              className={`h-full rounded-full ${
-                brakeWearLevel > 70 ? 'bg-red-500' : brakeWearLevel > 40 ? 'bg-yellow-500' : 'bg-green-500'
-              }`}
-              style={{ width: `${brakeWearLevel}%` }}
-              animate={{ width: `${brakeWearLevel}%` }}
-              transition={{ duration: 0.5 }}
-            />
-          </div>
-          <span className="text-sm font-bold">{brakeWearLevel}%</span>
-        </div>
-      </div>
-    </div>
-  );
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 text-black">
+    <div className="bg-[#080c14] text-gray-100 min-h-screen pt-32 sm:pt-36 pb-20 overflow-hidden">
+      
       {/* Hero Section */}
-      <section className="relative pt-24 pb-16 px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 via-transparent to-yellow-500/20"></div>
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,193,7,0.1),transparent_50%)]"></div>
+      <section className="relative px-4 sm:px-6 lg:px-8 pb-12 text-center max-w-4xl mx-auto">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-red-500/10 blur-[120px] rounded-full pointer-events-none" />
         
-        <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <motion.div
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="inline-block mb-6"
-            >
-              <div className="w-20 h-20 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center shadow-2xl border-2 border-yellow-600">
-                <Settings className="w-10 h-10 text-white" />
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs sm:text-sm font-semibold mb-6">
+          <Sparkles className="w-4 h-4 text-amber-400" />
+          <span>Maximum Stopping Power & Safety</span>
+        </div>
+
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">
+          Precision Ceramic <br />
+          <span className="gold-gradient-text">Brake Service & Rotors</span>.
+        </h1>
+
+        <p className="text-base sm:text-lg text-gray-300 mt-4 max-w-2xl mx-auto leading-relaxed">
+          Ensure zero squealing, vibration-free stopping, and rapid pedal response with our master ceramic brake pad and precision rotor packages.
+        </p>
+
+        <div className="flex flex-wrap justify-center gap-4 mt-8">
+          <Link href="/get-quote?service=brake" className="gold-glow-btn px-8 py-3.5 rounded-xl font-bold text-sm flex items-center space-x-2">
+            <Wrench className="w-4 h-4 text-black" />
+            <span>Book Brake Service</span>
+          </Link>
+          <a href="tel:+15551234567" className="outline-glow-btn px-7 py-3.5 rounded-xl font-semibold text-sm flex items-center space-x-2">
+            <Phone className="w-4 h-4 text-amber-400" />
+            <span>(555) 123-4567</span>
+          </a>
+        </div>
+      </section>
+
+      {/* INTERACTIVE ROTOR WITH FLYING SPARKS & HEAT DISTORTION */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="glass-card rounded-3xl p-6 sm:p-8 border-amber-500/30 shadow-2xl">
+          
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 mb-6 border-b border-gray-800 gap-4">
+            <div>
+              <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-400 uppercase tracking-wider">
+                <Disc className="w-4 h-4" />
+                <span>Brembo Thermal Rig with Live Sparks</span>
               </div>
-            </motion.div>
-            
-            <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 bg-clip-text text-transparent">
-              Premium Brake
-            </h1>
-            <h2 className="text-4xl md:text-6xl font-bold mb-8 bg-gradient-to-r from-gray-700 to-black bg-clip-text text-transparent">
-              Service & Repair
-            </h2>
-            
-            <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed">
-              Your safety is our priority. Experience our cutting-edge brake service with real-time diagnostics, 
-              premium components, and lifetime warranties.
-            </p>
-            
-            <div className="flex flex-wrap gap-4 justify-center">
-              <a href="/contact">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white rounded-full font-semibold text-lg shadow-2xl hover:shadow-yellow-500/25 transition-all border border-yellow-600"
-              >
-                <Calendar className="w-5 h-5 inline mr-2" />
-                Book Service Now
-              </motion.button>
-              </a>
-              <a href="/emergance">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-black text-white border border-gray-300 rounded-full font-semibold text-lg hover:bg-gray-800 transition-all shadow-lg"
-              >
-                <Phone className="w-5 h-5 inline mr-2" />
-                Emergency Service
-              </motion.button>
-              </a>
+              <h2 className="text-2xl font-extrabold text-white mt-1">
+                Cross-Drilled Rotor Friction & Heat Glow Bench
+              </h2>
             </div>
-          </motion.div>
-        </div>
-      </section>
 
-      {/* Interactive Brake System Visualization */}
-      <section className="py-16 px-4 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-500 to-yellow-600 bg-clip-text text-transparent">
-              Interactive Brake System
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Understand your brake system with our interactive visualization. See how brake wear affects performance in real-time.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-          >
-            <BrakeSystemVisualization />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Services Grid */}
-      <section className="py-16 px-4">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent">
-              Our Brake Services
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Professional brake services with cutting-edge technology and premium components
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {services.map((service, index) => (
-              <motion.div
-                key={service.id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                whileHover={{ y: -10 }}
-                className="relative group cursor-pointer"
-                onClick={() => setSelectedService(selectedService === service.id ? null : service.id)}
-              >
-                <div className="bg-white rounded-2xl p-8 h-full border border-gray-200 hover:border-yellow-400 transition-all shadow-lg hover:shadow-xl">
-                  <div className={`w-16 h-16 bg-gradient-to-r ${service.color} rounded-2xl flex items-center justify-center mb-6 shadow-lg`}>
-                    <Wrench className="w-8 h-8 text-white" />
-                  </div>
-                  
-                  <h3 className="text-2xl font-bold mb-4 text-black">{service.title}</h3>
-                  <p className="text-gray-600 mb-6">{service.description}</p>
-                  
-                  <div className="flex justify-between items-center mb-6">
-                    <span className="text-3xl font-bold text-black">{service.price}</span>
-                    <div className="flex items-center text-gray-500">
-                      <Clock className="w-4 h-4 mr-1" />
-                      <span className="text-sm">{service.duration}</span>
-                    </div>
-                  </div>
-                  
-                  <AnimatePresence>
-                    {selectedService === service.id && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="border-t border-gray-200 pt-6"
-                      >
-                        <ul className="space-y-2">
-                          {service.features.map((feature, featureIndex) => (
-                            <motion.li
-                              key={featureIndex}
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: featureIndex * 0.1 }}
-                              className="flex items-center text-gray-600"
-                            >
-                              <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
-                              <span className="text-sm">{feature}</span>
-                            </motion.li>
-                          ))}
-                        </ul>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                  
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`w-full mt-6 py-3 bg-gradient-to-r ${service.color} text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all`}
-                  >
-                    Select Service
-                    <ArrowRight className="w-4 h-4 inline ml-2" />
-                  </motion.button>
-                </div>
-              </motion.div>
-            ))}
+            <div className="flex gap-2 bg-gray-950 p-1.5 rounded-2xl border border-gray-800 text-xs">
+              {[
+                { id: "ceramic", label: "Ceramic Low-Dust" },
+                { id: "metallic", label: "Semi-Metallic" },
+                { id: "worn", label: "Worn Pad" }
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setPadMaterial(tab.id)}
+                  className={`px-3 py-1.5 rounded-xl font-semibold transition ${
+                    padMaterial === tab.id
+                      ? "bg-amber-500 text-black font-bold shadow-md shadow-amber-500/20"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
 
-      {/* Warning Signals */}
-      <section className="py-16 px-4 bg-gradient-to-r from-yellow-50 to-yellow-100">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-600 to-yellow-700 bg-clip-text text-transparent">
-              Warning Signals
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Don't ignore these brake warning signs. Your safety depends on immediate attention.
-            </p>
-          </motion.div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            {/* Visual Spinning Rotor & Flying Friction Sparks */}
+            <div className="lg:col-span-7 relative h-72 rounded-2xl bg-gradient-to-b from-gray-950 via-gray-900 to-black border border-gray-800 p-4 flex items-center justify-center overflow-hidden">
+              
+              {/* Friction Sparks Flying Effect */}
+              {isHighFriction && (
+                <div className="absolute inset-0 pointer-events-none overflow-hidden z-30">
+                  {[...Array(16)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="absolute w-1.5 h-1.5 bg-yellow-300 rounded-full shadow-[0_0_8px_#f59e0b]"
+                      style={{
+                        top: `${30 + Math.random() * 40}%`,
+                        left: `${25 + Math.random() * 50}%`,
+                        animation: `laserSweep ${0.4 + Math.random() * 0.4}s ease-out infinite`,
+                        animationDelay: `${i * 0.08}s`
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {warningSignals.map((signal, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-                className={`p-6 rounded-2xl border-2 transition-all bg-white shadow-lg ${
-                  signal.severity === 'high' 
-                    ? 'border-red-400 hover:border-red-500' 
-                    : 'border-yellow-400 hover:border-yellow-500'
+              {/* Spinning Disc */}
+              <div 
+                className="relative w-48 h-48 rounded-full border-8 border-gray-600 shadow-2xl flex items-center justify-center transition-all"
+                style={{
+                  boxShadow: isHighFriction ? `0 0 ${brakePressurePercent * 0.5}px rgba(239, 68, 68, 0.8)` : 'none',
+                  animation: isRotating 
+                    ? `spin ${Math.max(0.2, 3 - (rotorSpeedRpm / 3000) * 2.5)}s linear infinite` 
+                    : 'none'
+                }}
+              >
+                {/* Thermal Color Surface */}
+                <div 
+                  className="w-36 h-36 rounded-full border-4 border-gray-500 relative flex items-center justify-center transition-colors duration-300"
+                  style={{
+                    backgroundColor: brakePressurePercent > 60 ? '#7f1d1d' : brakePressurePercent > 30 ? '#451a03' : '#374151'
+                  }}
+                >
+                  {[...Array(8)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="absolute w-2.5 h-2.5 rounded-full bg-gray-900 shadow-inner"
+                      style={{
+                        top: `${50 + 32 * Math.sin((i * Math.PI) / 4)}%`,
+                        left: `${50 + 32 * Math.cos((i * Math.PI) / 4)}%`,
+                        transform: 'translate(-50%, -50%)'
+                      }}
+                    />
+                  ))}
+                  <div className="w-14 h-14 rounded-full bg-black border-2 border-amber-400 z-10 flex items-center justify-center font-black text-[10px] text-amber-400">
+                    60 MPH
+                  </div>
+                </div>
+              </div>
+
+              {/* Dynamic Clamping Caliper */}
+              <div 
+                className={`absolute top-6 left-12 z-20 px-3 py-1.5 rounded-xl border font-black text-xs transition-all duration-300 shadow-xl ${
+                  brakePressurePercent > 50
+                    ? "bg-red-600 border-red-400 text-white scale-110 shadow-red-500/50 animate-pulse"
+                    : "bg-amber-500 border-amber-400 text-black"
                 }`}
               >
-                <div className="flex items-center gap-4">
-                  <div className={`p-3 rounded-full ${
-                    signal.severity === 'high' ? 'bg-red-500' : 'bg-yellow-500'
-                  }`}>
-                    {signal.icon}
-                  </div>
-                  <div>
-                    <p className="text-black font-semibold">{signal.text}</p>
-                    <p className={`text-sm ${
-                      signal.severity === 'high' ? 'text-red-600' : 'text-yellow-600'
-                    }`}>
-                      {signal.severity === 'high' ? 'Critical - Immediate Attention' : 'Important - Schedule Service'}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+                {brakePressurePercent > 0 ? `CLAMPED (${brakePressurePercent}%)` : "BREMBO CALIPER"}
+              </div>
 
-      {/* Why Choose Us */}
-      <section className="py-16 px-4">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent">
-              Why Choose Our Brake Service?
-            </h2>
-          </motion.div>
+              {/* Live Overlay HUD */}
+              <div className="absolute bottom-3 left-4 right-4 flex justify-between items-center bg-gray-950/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-gray-800 text-xs">
+                <span className="text-gray-300 flex items-center gap-1">
+                  <Thermometer className="w-3.5 h-3.5 text-amber-400" />
+                  Rotor Temp: <strong className={rotorTempC > 400 ? "text-red-400" : "text-amber-400"}>{rotorTempC}°C</strong>
+                </span>
+                <span className="text-gray-300 flex items-center gap-1">
+                  <Gauge className="w-3.5 h-3.5 text-amber-400" />
+                  60-0 Stopping Dist: <strong className="text-white">{stoppingDistanceFt} ft</strong>
+                </span>
+              </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: <Shield className="w-12 h-12" />,
-                title: "Safety First",
-                description: "Advanced diagnostic tools and certified technicians ensure your safety on every drive."
-              },
-              {
-                icon: <Award className="w-12 h-12" />,
-                title: "Premium Quality",
-                description: "We use only the highest quality brake components with lifetime warranties."
-              },
-              {
-                icon: <Zap className="w-12 h-12" />,
-                title: "Fast Service",
-                description: "Most brake services completed same day with our efficient workflow system."
-              }
-            ].map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
-                whileHover={{ y: -10 }}
-                className="text-center group"
-              >
-                <div className="bg-white rounded-2xl p-8 h-full border border-gray-200 hover:border-yellow-400 transition-all shadow-lg hover:shadow-xl">
-                  <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-all">
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-2xl font-bold mb-4 text-black">{feature.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{feature.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-yellow-100 to-yellow-200">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent">
-              Don't Compromise on Safety
-            </h2>
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Schedule your brake service today and experience the difference of premium brake care.
-            </p>
-            
-            <div className="flex flex-wrap gap-4 justify-center">
-              <a href="/contact">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white rounded-full font-semibold text-lg shadow-2xl hover:shadow-yellow-500/25 transition-all border border-yellow-600"
-              >
-                <Calendar className="w-5 h-5 inline mr-2" />
-                Book Brake Service
-              </motion.button>
-              </a>
-              <a href="/contact">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-black text-white border border-gray-300 rounded-full font-semibold text-lg hover:bg-gray-800 transition-all shadow-lg"
-              >
-                <Phone className="w-5 h-5 inline mr-2" />
-                Call (555) 123-BRAKE
-              </motion.button>
-              </a>
             </div>
-          </motion.div>
+
+            {/* Controls */}
+            <div className="lg:col-span-5 space-y-5">
+              <div>
+                <div className="flex justify-between items-center text-xs mb-1.5">
+                  <span className="text-gray-300 font-semibold flex items-center gap-1">
+                    <Disc className="w-3.5 h-3.5 text-amber-400" />
+                    Hydraulic Brake Pedal Pressure: {brakePressurePercent}%
+                  </span>
+                  <span className="text-amber-400 font-bold">{rotorTempC}°C</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={brakePressurePercent}
+                  onChange={(e) => setBrakePressurePercent(Number(e.target.value))}
+                  className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                />
+              </div>
+
+              <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 space-y-2 text-xs">
+                <div className="flex justify-between text-gray-300">
+                  <span>Pad Friction Coefficient (μ):</span>
+                  <strong className="text-amber-400">{padMaterial === "ceramic" ? "0.45 (Optimal Bite)" : padMaterial === "metallic" ? "0.38" : "0.21 (Critical)"}</strong>
+                </div>
+                <div className="flex justify-between text-gray-300">
+                  <span>Brake Dust Generation:</span>
+                  <strong className="text-white">{padMaterial === "ceramic" ? "Ultra-Low / Clean" : "High Brake Dust"}</strong>
+                </div>
+                <div className="flex justify-between text-gray-300">
+                  <span>Thermal Fade Resistance:</span>
+                  <strong className="text-white">{padMaterial === "ceramic" ? "Up to 650°C Zero Fade" : "Moderate"}</strong>
+                </div>
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setIsRotating(!isRotating)}
+                  className="flex-1 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-white flex items-center justify-center gap-1.5 transition"
+                >
+                  {isRotating ? <Pause className="w-3.5 h-3.5 text-amber-400" /> : <Play className="w-3.5 h-3.5 text-amber-400" />}
+                  <span>{isRotating ? "Pause Rotor" : "Spin Rotor"}</span>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
         </div>
       </section>
+
+      {/* Packages Grid */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {packages.map((pkg, idx) => (
+            <div
+              key={idx}
+              className={`glass-card rounded-3xl p-7 sm:p-8 flex flex-col justify-between cursor-pointer border ${
+                activePlan === idx ? "border-amber-400/60 shadow-2xl shadow-amber-500/15" : "border-gray-800"
+              }`}
+              onClick={() => setActivePlan(idx)}
+            >
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">{pkg.title}</h3>
+                <div className="flex items-baseline gap-2 mb-3">
+                  <span className="text-3xl sm:text-4xl font-black text-amber-400">{pkg.price}</span>
+                  <span className="text-xs text-gray-400">/ est. {pkg.time}</span>
+                </div>
+                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed mb-6">
+                  {pkg.desc}
+                </p>
+
+                <ul className="space-y-2.5 border-t border-gray-800 pt-4">
+                  {pkg.features.map((f, fIdx) => (
+                    <li key={fIdx} className="flex items-start text-xs sm:text-sm text-gray-300 space-x-2">
+                      <CheckCircle2 className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-8 pt-4 border-t border-gray-800">
+                <Link
+                  href={`/get-quote?service=${encodeURIComponent(pkg.title)}`}
+                  className={`w-full py-3.5 rounded-xl text-center text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition ${
+                    activePlan === idx ? "gold-glow-btn" : "bg-gray-800 hover:bg-amber-500 hover:text-black text-gray-200"
+                  }`}
+                >
+                  <span>Select Package</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
     </div>
   );
-};
-
-export default BrakeServicePage;
+}

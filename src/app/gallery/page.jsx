@@ -1,207 +1,223 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { Camera, ZoomIn } from 'lucide-react';
+import React, { useState } from "react";
+import Link from "next/link";
+import { 
+  Sparkles, CheckCircle2, Sliders, ArrowRight, 
+  Wrench, Camera, ShieldCheck, Star 
+} from "lucide-react";
+import { 
+  MotionFadeUp, MotionSlideLeft, MotionSlideRight, 
+  MotionZoomPop, MotionFlip3D, MotionStaggerContainer, 
+  MotionStaggerItem 
+} from "../components/motion-wrapper";
 
-const GalleryPage = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [hoveredImage, setHoveredImage] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
+export default function GalleryPage() {
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [sliderPosition, setSliderPosition] = useState(50);
 
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
-  const galleryImages = [
-    { id: 1, src: '/images/car1.jpg', alt: 'Car Service 1', title: 'Engine Repair' },
-    { id: 2, src: '/images/car2.jpg', alt: 'Car Service 2', title: 'Brake Maintenance' },
-    { id: 3, src: '/images/car3.jpg', alt: 'Car Service 3', title: 'Oil Change' },
-    { id: 4, src: '/images/car4.jpg', alt: 'Car Service 4', title: 'Tire Installation' },
-    { id: 5, src: '/images/car5.jpg', alt: 'Car Service 5', title: 'Transmission Service' },
-    { id: 6, src: '/images/car6.jpg', alt: 'Car Service 6', title: 'Car Detailing' },
+  const projects = [
+    {
+      title: "Porsche 911 GT3 Engine Carbon Clean & Dyno Calibration",
+      category: "engine",
+      type: "Performance Overhaul",
+      gain: "+34 BHP Restored",
+      before: "Intake valve direct-injection carbon blockage & misfire at 6,500 RPM",
+      after: "Ultrasonic walnut blast clean, new iridium plugs & 505 BHP dyno verified"
+    },
+    {
+      title: "BMW M4 Competition Ceramic Rotor & Pad Overhaul",
+      category: "brakes",
+      type: "Brake Overhaul",
+      gain: "60-0 in 108 ft",
+      before: "Scored OEM cast iron rotors with high brake dust & pedal pulse",
+      after: "Cross-drilled coated sport rotors with dust-free ceramic compound"
+    },
+    {
+      title: "Audi RS6 Avant Dual-Clutch Transmission Mechatronic Rebuild",
+      category: "transmission",
+      type: "Drivetrain",
+      gain: "80ms Shift Speed",
+      before: "Jerky 1st-to-2nd gear engagement & hydraulic solenoid slip code",
+      after: "New OEM solenoid pack, mechatronic fluid exchange & adaptation re-learn"
+    },
+    {
+      title: "Mercedes-AMG C63 High-Output Synthetic Service & Detailing",
+      category: "maintenance",
+      type: "Precision Pitstop",
+      gain: "100% Health Score",
+      before: "Overdue 12,000-mile service with dark oxidized motor oil",
+      after: "German Liqui Moly full synthetic flush & ceramic engine protectant"
+    }
   ];
 
-  const openLightbox = (image) => setSelectedImage(image);
-  const closeLightbox = () => setSelectedImage(null);
+  const filtered = activeCategory === "all"
+    ? projects
+    : projects.filter((p) => p.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Hero Section */}
-      <section className="relative min-h-[50vh] flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black">
-        <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 to-transparent"></div>
+    <div className="bg-[#080c14] text-gray-100 min-h-screen pt-32 sm:pt-36 pb-20 overflow-hidden">
+      
+      {/* Hero Section (FADE UP) */}
+      <MotionFadeUp className="relative px-4 sm:px-6 lg:px-8 pb-12 text-center max-w-4xl mx-auto">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-amber-500/10 blur-[120px] rounded-full pointer-events-none" />
         
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(20)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute bg-yellow-400 rounded-full opacity-20 animate-pulse"
-              style={{
-                width: `${Math.random() * 5 + 2}px`,
-                height: `${Math.random() * 5 + 2}px`,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 2}s`
-              }}
-            />
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs sm:text-sm font-semibold mb-6">
+          <Camera className="w-4 h-4 text-amber-400" />
+          <span>Workshop Project Transformations</span>
+        </div>
+
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">
+          Master Engineering <br />
+          <span className="gold-gradient-text">Project Gallery</span>.
+        </h1>
+
+        <p className="text-base sm:text-lg text-gray-300 mt-4 max-w-2xl mx-auto leading-relaxed">
+          Inspect recent high-performance engine overhauls, ceramic brake transformations, and drivetrain restorations executed in our clean-room workshop bays.
+        </p>
+
+        {/* Filter Categories */}
+        <div className="flex flex-wrap justify-center gap-2 mt-8">
+          {[
+            { id: "all", label: "All Projects" },
+            { id: "engine", label: "Engine Builds" },
+            { id: "brakes", label: "Ceramic Brakes" },
+            { id: "transmission", label: "Transmission" },
+            { id: "maintenance", label: "Synthetic Care" }
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveCategory(tab.id)}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition ${
+                activeCategory === tab.id
+                  ? "bg-amber-500 text-black font-bold shadow-md shadow-amber-500/20"
+                  : "bg-gray-900 border border-gray-800 text-gray-300 hover:border-gray-700"
+              }`}
+            >
+              {tab.label}
+            </button>
           ))}
         </div>
+      </MotionFadeUp>
 
-        <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8">
-          <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <div className="animate-bounce mb-8 relative">
-              <Camera className="w-20 h-20 text-yellow-400 mx-auto" />
-              <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full animate-ping"></div>
+      {/* INTERACTIVE BEFORE / AFTER SLIDER (ZOOM POP) */}
+      <MotionZoomPop className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="glass-card rounded-3xl p-6 sm:p-8 border-amber-500/30 shadow-2xl">
+          
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 mb-6 border-b border-gray-800 gap-4">
+            <div>
+              <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-400 uppercase tracking-wider">
+                <Sliders className="w-4 h-4" />
+                <span>Interactive Transformation Viewer</span>
+              </div>
+              <h2 className="text-2xl font-extrabold text-white mt-1">
+                Before vs. After Workshop Restoration
+              </h2>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-yellow-400 to-white bg-clip-text text-transparent animate-pulse">
-              Our Work Gallery
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto opacity-0 animate-fadeInUp" style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}>
-              Explore our automotive service highlights
-            </p>
+            <div className="text-xs text-gray-400 font-medium">
+              Drag slider to compare vehicle state
+            </div>
           </div>
-        </div>
-      </section>
 
-      {/* Gallery Section */}
-      <section className="py-20 bg-gradient-to-b from-black to-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {galleryImages.map((image, index) => (
-              <div
-                key={image.id}
-                className={`relative group rounded-xl overflow-hidden transform transition-all duration-1000 ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                }`}
-                style={{ transitionDelay: `${index * 0.2}s` }}
-                onMouseEnter={() => setHoveredImage(image.id)}
-                onMouseLeave={() => setHoveredImage(null)}
-                onClick={() => openLightbox(image)}
-              >
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-                  <div className="p-4 w-full">
-                    <h3 className="text-lg font-semibold text-yellow-400">{image.title}</h3>
-                    <div className={`flex items-center gap-2 mt-2 transition-all duration-300 ${hoveredImage === image.id ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-                      <ZoomIn className="w-5 h-5 text-yellow-400" />
-                      <span className="text-gray-300">Click to enlarge</span>
-                    </div>
+          {/* Interactive Split Canvas */}
+          <div className="relative h-64 sm:h-72 rounded-2xl overflow-hidden border-2 border-gray-800 shadow-2xl">
+            
+            <div 
+              className="absolute inset-0 bg-gradient-to-r from-red-950/40 via-gray-900 to-gray-950 p-6 flex flex-col justify-between"
+              style={{ clipPath: `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)` }}
+            >
+              <div className="inline-block px-3 py-1 rounded-full bg-red-500/20 text-red-400 text-xs font-bold w-fit border border-red-500/30">
+                BEFORE HACKMOB
+              </div>
+              <div className="max-w-sm">
+                <h4 className="text-lg font-bold text-red-300">Worn, Carbonized & Failing Components</h4>
+                <p className="text-xs text-gray-400 mt-1">Direct-injection carbon buildup, brake disc pulsation, and sluggish shifts.</p>
+              </div>
+              <div className="text-xs text-red-400 font-mono">Telemetry: Multiple Fault Codes • High Friction</div>
+            </div>
+
+            <div 
+              className="absolute inset-0 bg-gradient-to-r from-gray-950 via-gray-900 to-amber-950/40 p-6 flex flex-col justify-between items-end text-right"
+              style={{ clipPath: `polygon(${sliderPosition}% 0, 100% 0, 100% 100%, ${sliderPosition}% 100%)` }}
+            >
+              <div className="inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold w-fit border border-emerald-500/30">
+                AFTER HACKMOB RESTORATION
+              </div>
+              <div className="max-w-sm">
+                <h4 className="text-lg font-bold text-amber-300">Clean-Room Precision Calibrated</h4>
+                <p className="text-xs text-gray-300 mt-1">Ultrasonic cleaned, OEM replacement parts, and dyno road-tested with 2-year warranty.</p>
+              </div>
+              <div className="text-xs text-emerald-400 font-mono">Telemetry: Zero Fault Codes • 100% Dyno Verified</div>
+            </div>
+
+            <div 
+              className="absolute top-0 bottom-0 w-1 bg-amber-400 shadow-xl pointer-events-none"
+              style={{ left: `${sliderPosition}%` }}
+            >
+              <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 bg-amber-400 rounded-full flex items-center justify-center text-black font-black text-xs shadow-2xl">
+                ⇆
+              </div>
+            </div>
+
+          </div>
+
+          {/* Interactive Range Slider */}
+          <div className="mt-5">
+            <input
+              type="range"
+              min="5"
+              max="95"
+              value={sliderPosition}
+              onChange={(e) => setSliderPosition(Number(e.target.value))}
+              className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+            />
+            <div className="flex justify-between text-xs text-gray-400 mt-1">
+              <span>← Slide for Before Condition</span>
+              <span>Slide for After Condition →</span>
+            </div>
+          </div>
+
+        </div>
+      </MotionZoomPop>
+
+      {/* Projects Grid (STAGGERED CONTAINER) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <MotionStaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {filtered.map((proj, idx) => (
+            <MotionStaggerItem key={idx} className="glass-card rounded-3xl p-7 border-gray-800 flex flex-col justify-between hover:border-amber-500/40 transition-all">
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                    {proj.type}
+                  </span>
+                  <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
+                    {proj.gain}
+                  </span>
+                </div>
+
+                <h3 className="text-xl font-bold text-white mb-4">{proj.title}</h3>
+
+                <div className="space-y-2 text-xs bg-gray-950 p-4 rounded-2xl border border-gray-800">
+                  <div className="text-red-400">
+                    <strong>Initial Symptom:</strong> {proj.before}
+                  </div>
+                  <div className="text-emerald-400 pt-1 border-t border-gray-900">
+                    <strong>HackMob Solution:</strong> {proj.after}
                   </div>
                 </div>
-                {hoveredImage === image.id && (
-                  <div className="absolute inset-0 bg-yellow-400/10 rounded-xl animate-ping"></div>
-                )}
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Lightbox */}
-      {selectedImage && (
-        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 animate-fadeIn">
-          <div className="relative max-w-4xl w-full">
-            <img
-              src={selectedImage.src}
-              alt={selectedImage.alt}
-              className="w-full h-auto rounded-xl max-h-[80vh] object-contain"
-            />
-            <h3 className="text-2xl font-semibold text-yellow-400 mt-4 text-center">{selectedImage.title}</h3>
-            <button
-              onClick={closeLightbox}
-              className="absolute top-4 right-4 bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold hover:bg-yellow-500 transition-all duration-300"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* CTA Section */}
-      <section className="py-20 bg-black relative overflow-hidden">
-        <div className="absolute inset-0">
-          {[...Array(10)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-yellow-400 rounded-full opacity-30"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 2}s`,
-                animation: `twinkle ${2 + Math.random() * 2}s infinite`
-              }}
-            />
+              <div className="mt-6 pt-4 border-t border-gray-800 flex items-center justify-between">
+                <span className="text-xs text-gray-400">24-Month Warranty Protected</span>
+                <Link href="/get-quote" className="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1">
+                  <span>Book Similar Service</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </MotionStaggerItem>
           ))}
-        </div>
-        
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-8 rounded-2xl border border-gray-700 hover:border-yellow-400 transition-all duration-500 group">
-            <div className="relative">
-              <Camera className="w-16 h-16 text-yellow-400 mx-auto mb-6 group-hover:animate-bounce transition-all duration-300" />
-              <div className="absolute inset-0 bg-yellow-400/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-yellow-400 group-hover:text-white transition-colors duration-300">
-              Want to See More?
-            </h2>
-            <p className="text-xl text-gray-300 mb-8 group-hover:text-gray-100 transition-colors duration-300">
-              Contact us to learn more about our automotive services
-            </p>
-            <a href="/contact">
-            <button className="bg-yellow-400 text-black px-8 py-4 rounded-full text-lg font-semibold hover:bg-yellow-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg hover:shadow-yellow-400/30">
-              Get in Touch
-            </button>
-            </a>
-          </div>
-        </div>
+        </MotionStaggerContainer>
       </section>
 
-      {/* Custom CSS */}
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes twinkle {
-          0%, 100% {
-            opacity: 0.3;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 1;
-            transform: scale(1.2);
-          }
-        }
-        
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-        
-        .animate-fadeInUp {
-          animation: fadeInUp 0.6s ease-out;
-        }
-        
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-out;
-        }
-      `}</style>
     </div>
   );
-};
-
-export default GalleryPage;
+}

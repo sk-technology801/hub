@@ -1,97 +1,99 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
-import { Phone, MapPin, Clock, Mail, Facebook, Twitter, Instagram, Youtube, Star, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
+import React, { useState } from "react";
+import Link from "next/link";
+import { 
+  Phone, MapPin, Clock, Mail, Facebook, Twitter, 
+  Instagram, Youtube, ArrowRight, Gauge, ShieldCheck, 
+  CheckCircle2, Sparkles 
+} from "lucide-react";
 
 const Footer = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const footerRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (footerRef.current) {
-      observer.observe(footerRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
 
   const handleSubscribe = (e) => {
     e.preventDefault();
-    if (email) {
+    if (email.trim()) {
       setIsSubscribed(true);
       setTimeout(() => {
         setIsSubscribed(false);
-        setEmail('');
-      }, 3000);
+        setEmail("");
+      }, 4000);
     }
   };
 
   const serviceLinks = [
-    { label: "Oil Change Service",      href: "/services/oil-change" },
-    { label: "Brake Repair & Service",  href: "/services/brake" },
-    { label: "Engine Diagnostics",      href: "/services/engine" },
-    { label: "Transmission Repair",     href: "/services/transmission" },
-    { label: "Tire Installation",       href: "/services/tire" },
-    { label: "AC Repair Service",       href: "/services/ac-repair" },
+    { label: "Computerized Engine Diagnostics", href: "/services/engine" },
+    { label: "Precision Brake Service & Rotors", href: "/services/brake" },
+    { label: "Synthetic Oil & Multi-Point Health", href: "/services/oil-change" },
+    { label: "Transmission Flush & Rebuild", href: "/services/transmission" },
+    { label: "Performance Tires & 3D Alignment", href: "/services/tire" },
+    { label: "Climate Control & AC Overhaul", href: "/services/ac-repair" },
   ];
+
   const quickLinks = [
-    { label: "About Us",      href: "/about" },
-    { label: "Service Areas",  href: "/services/transmission" },
-    { label: "Pricing & Packages",   href: "/pricing" },
-    { label: "Customer Reviews",     href: "/review" },
-    { label: "Career Opportunities",       href: "/careeropportunities" },
-    { label: "Contact Us",       href: "/contact" },
+    { label: "About HackMob", href: "/about" },
+    { label: "Diagnostic Center", href: "/diagnostic" },
+    { label: "Transparent Pricing", href: "/pricing" },
+    { label: "Customer Reviews", href: "/testimonials" },
+    { label: "Certified Team", href: "/team" },
+    { label: "Photo Gallery", href: "/gallery" },
+    { label: "Auto Care Blog", href: "/blog" },
+    { label: "Contact & Location", href: "/contact" },
   ];
-  const footerLinks = [
-    { label: "Privacy Policy",      href: "/privacy" },
-    { label: "Terms of Service",  href: "/term" },
-    { label: "Cookie Policy",   href: "/cookiepolicy" },
-    { label: "Sitemap",     href: "/sitemap" },
+
+  const legalLinks = [
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms of Service", href: "/term" },
+    { label: "Cookie Policy", href: "/cookiepolicy" },
+    { label: "Emergency Policy", href: "/emergance" },
   ];
 
   return (
-    <footer ref={footerRef} className="bg-gray-900 text-white overflow-hidden">
-      {/* Newsletter Section */}
-      <div className="bg-yellow-500 text-white relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className={`flex flex-col lg:flex-row items-center justify-between transition-all duration-1000 ${
-            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-          }`}>
-            <div className="text-center lg:text-left mb-4 lg:mb-0">
-              <h3 className="text-2xl font-bold mb-2">Stay Updated with Our Latest Services</h3>
-              <p className="text-lg opacity-90">Get exclusive deals and maintenance tips delivered to your inbox</p>
+    <footer className="bg-gray-950 text-gray-300 border-t border-gray-800/80 relative overflow-hidden">
+      
+      {/* Top Newsletter Bar */}
+      <div className="border-b border-gray-800 bg-gray-900/60 py-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+            <div className="text-center lg:text-left space-y-1">
+              <div className="flex items-center justify-center lg:justify-start space-x-2 text-amber-400 text-xs font-bold uppercase tracking-wider">
+                <Sparkles className="w-4 h-4" />
+                <span>HackMob Club & Maintenance Insights</span>
+              </div>
+              <h3 className="text-2xl font-bold text-white">
+                Get Exclusive Service Discounts & Seasonal Tips
+              </h3>
+              <p className="text-sm text-gray-400">
+                Join 8,000+ drivers receiving monthly maintenance advice and $25 seasonal coupons.
+              </p>
             </div>
-            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row w-full lg:w-auto max-w-md">
+
+            {/* Newsletter Form */}
+            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row w-full lg:w-auto max-w-md gap-2">
               <input
                 type="email"
-                placeholder="Enter your email address"
+                placeholder="Enter your email address..."
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 px-4 py-3 text-gray-900 rounded-l-lg sm:rounded-r-none rounded-r-lg border-none focus:outline-none focus:ring-2 focus:ring-white transition-all duration-300 transform focus:scale-105"
                 required
+                className="flex-1 px-4 py-3 bg-gray-950 border border-gray-700 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 transition"
               />
-              <button 
+              <button
                 type="submit"
-                className={`bg-gray-900 text-white px-6 py-3 rounded-r-lg sm:rounded-l-none rounded-l-lg hover:bg-gray-800 transition-all duration-300 font-semibold flex items-center justify-center transform hover:scale-105 ${
-                  isSubscribed ? 'bg-green-600 hover:bg-green-700' : ''
-                }`}
+                className="gold-glow-btn px-6 py-3 rounded-xl text-sm font-bold flex items-center justify-center space-x-2 flex-shrink-0"
               >
-                {isSubscribed ? 'Subscribed!' : 'Subscribe'}
-                <ArrowRight className={`w-4 h-4 ml-2 transition-transform duration-300 ${
-                  isSubscribed ? 'rotate-90' : ''
-                }`} />
+                {isSubscribed ? (
+                  <span className="flex items-center text-black font-bold">
+                    <CheckCircle2 className="w-4 h-4 mr-1 text-black" />
+                    Subscribed!
+                  </span>
+                ) : (
+                  <span className="flex items-center text-black font-bold">
+                    Subscribe
+                    <ArrowRight className="w-4 h-4 ml-1.5" />
+                  </span>
+                )}
               </button>
             </form>
           </div>
@@ -99,159 +101,153 @@ const Footer = () => {
       </div>
 
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
           
-          {/* Company Info */}
-          <div className={`space-y-6 transition-all duration-1000 delay-100 ${
-            isVisible ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'
-          }`}>
-            <div className="flex items-center">
-              <div className="bg-yellow-500 text-white p-2 rounded-lg mr-3 transition-all duration-300 hover:bg-yellow-600 hover:scale-110 hover:rotate-3">
-                <div className="w-8 h-8 flex items-center justify-center font-bold text-xl">
-                  H
-                </div>
+          {/* Col 1: Brand Info (4 cols) */}
+          <div className="lg:col-span-4 space-y-5">
+            <Link href="/" className="flex items-center space-x-3 group inline-block">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 to-yellow-400 flex items-center justify-center shadow-lg shadow-amber-500/20">
+                <Gauge className="w-6 h-6 text-black" />
               </div>
-              <div>
-                <h2 className="text-xl font-serif hover:text-yellow-500 transition-colors duration-300">HackMob</h2>
-                <p className="text-sm text-gray-300">Auto Services</p>
+              <div className="flex flex-col">
+                <span className="text-2xl font-black tracking-wider text-white">
+                  HACK<span className="text-amber-400">MOB</span>
+                </span>
+                <span className="text-[10px] uppercase tracking-widest text-gray-400 font-semibold -mt-1">
+                  Auto Performance & Care
+                </span>
               </div>
-            </div>
-            <p className="text-gray-300 leading-relaxed">
-              Your trusted automotive service provider for over 25 years. We deliver quality repairs, maintenance, and customer satisfaction you can count on.
+            </Link>
+
+            <p className="text-sm text-gray-400 leading-relaxed max-w-sm">
+              Your premier dealership alternative for computerized diagnostics, high-performance tuning, and certified preventative maintenance backed by a 24-month warranty.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="bg-gray-800 p-2 rounded-full hover:bg-yellow-500 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1">
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a href="#" className="bg-gray-800 p-2 rounded-full hover:bg-yellow-500 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1">
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a href="#" className="bg-gray-800 p-2 rounded-full hover:bg-yellow-500 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1">
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a href="#" className="bg-gray-800 p-2 rounded-full hover:bg-yellow-500 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1">
-                <Youtube className="w-5 h-5" />
-              </a>
+
+            <div className="flex items-center space-x-3">
+              <span className="inline-flex items-center px-3 py-1 rounded-lg bg-gray-900 border border-gray-800 text-xs font-semibold text-amber-400">
+                <ShieldCheck className="w-3.5 h-3.5 mr-1.5" />
+                ASE Certified Masters
+              </span>
+              <span className="inline-flex items-center px-3 py-1 rounded-lg bg-gray-900 border border-gray-800 text-xs font-semibold text-emerald-400">
+                <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />
+                OEM Certified Parts
+              </span>
+            </div>
+
+            {/* Social Icons */}
+            <div className="flex space-x-2 pt-2">
+              {[
+                { icon: Facebook, href: "#", label: "Facebook" },
+                { icon: Twitter, href: "#", label: "Twitter" },
+                { icon: Instagram, href: "#", label: "Instagram" },
+                { icon: Youtube, href: "#", label: "Youtube" },
+              ].map((item, i) => (
+                <a
+                  key={i}
+                  href={item.href}
+                  aria-label={item.label}
+                  className="w-9 h-9 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-center text-gray-400 hover:text-amber-400 hover:border-amber-400/40 hover:bg-gray-850 transition"
+                >
+                  <item.icon className="w-4 h-4" />
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Services */}
-          <div className={`transition-all duration-1000 delay-200 ${
-            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
-          }`}>
-            <h3 className="text-lg font-semibold mb-6 text-yellow-500 relative">
+          {/* Col 2: Services (3 cols) */}
+          <div className="lg:col-span-3 space-y-4">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider border-b border-gray-800 pb-2">
               Our Services
-              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-500 group-hover:w-full"></div>
-            </h3>
-            <ul className="space-y-3">
-              {serviceLinks.map(({ label, href }) => (
-                <li key={href}>
+            </h4>
+            <ul className="space-y-2.5">
+              {serviceLinks.map((item) => (
+                <li key={item.href}>
                   <Link
-                    href={href}
-                    className="text-gray-300 hover:text-yellow-500 transition-all duration-300 flex items-center group transform hover:translate-x-2"
+                    href={item.href}
+                    className="text-xs sm:text-sm text-gray-400 hover:text-amber-400 flex items-center group transition"
                   >
-                    <ArrowRight className="w-4 h-4 mr-2 text-yellow-500 transition-transform duration-300 group-hover:translate-x-1" />
-                    {label}
+                    <ArrowRight className="w-3.5 h-3.5 mr-2 text-amber-400/60 group-hover:text-amber-400 group-hover:translate-x-1 transition-all" />
+                    <span>{item.label}</span>
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Quick Links */}
-          <div className={`transition-all duration-1000 delay-300 ${
-            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
-          }`}>
-            <h3 className="text-lg font-semibold mb-6 text-yellow-500">Quick Links</h3>
-            <ul className="space-y-3">
-              {quickLinks.map(({ label, href }) => (
-                <li key={href}>
+          {/* Col 3: Quick Links (2 cols) */}
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider border-b border-gray-800 pb-2">
+              Navigation
+            </h4>
+            <ul className="space-y-2.5">
+              {quickLinks.map((item) => (
+                <li key={item.href}>
                   <Link
-                    href={href}
-                    className="text-gray-300 hover:text-yellow-500 transition-all duration-300 flex items-center group transform hover:translate-x-2"
+                    href={item.href}
+                    className="text-xs sm:text-sm text-gray-400 hover:text-amber-400 flex items-center group transition"
                   >
-                    <ArrowRight className="w-4 h-4 mr-2 text-yellow-500 transition-transform duration-300 group-hover:translate-x-1" />
-                    {label}
+                    <ArrowRight className="w-3.5 h-3.5 mr-2 text-amber-400/60 group-hover:text-amber-400 group-hover:translate-x-1 transition-all" />
+                    <span>{item.label}</span>
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Contact Info */}
-          <div className={`transition-all duration-1000 delay-400 ${
-            isVisible ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'
-          }`}>
-            <h3 className="text-lg font-semibold mb-6 text-yellow-500">Contact Info</h3>
-            <div className="space-y-4">
-              <div className="flex items-start space-x-3 group">
-                <MapPin className="w-5 h-5 text-yellow-500 mt-1 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" />
-                <div>
-                  <p className="text-gray-300 group-hover:text-white transition-colors duration-300">123 Auto Service Street</p>
-                  <p className="text-gray-300 group-hover:text-white transition-colors duration-300">City, State 12345</p>
-                </div>
+          {/* Col 4: Contact & Hours (3 cols) */}
+          <div className="lg:col-span-3 space-y-4">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider border-b border-gray-800 pb-2">
+              Workshop Contact
+            </h4>
+            <div className="space-y-3 text-xs sm:text-sm text-gray-400">
+              <div className="flex items-start space-x-3">
+                <MapPin className="w-4 h-4 text-amber-400 flex-shrink-0 mt-1" />
+                <span>123 Auto Service St, Tech City, State 12345</span>
               </div>
-              <div className="flex items-center space-x-3 group">
-                <Phone className="w-5 h-5 text-yellow-500 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" />
-                <div>
-                  <p className="text-gray-300 group-hover:text-white transition-colors duration-300">+1 (555) 123-4567</p>
-                  <p className="text-sm text-gray-400">24/7 Emergency Service</p>
-                </div>
+
+              <div className="flex items-center space-x-3">
+                <Phone className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                <a href="tel:+15551234567" className="hover:text-white transition">
+                  +1 (555) 123-4567
+                </a>
               </div>
-              <div className="flex items-center space-x-3 group">
-                <Mail className="w-5 h-5 text-yellow-500 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" />
-                <div>
-                  <p className="text-gray-300 group-hover:text-white transition-colors duration-300">info@audeck.com</p>
-                  <p className="text-sm text-gray-400">Get a free quote</p>
-                </div>
+
+              <div className="flex items-center space-x-3">
+                <Mail className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                <a href="mailto:service@hackmobauto.com" className="hover:text-white transition">
+                  service@hackmobauto.com
+                </a>
               </div>
-              <div className="flex items-start space-x-3 group">
-                <Clock className="w-5 h-5 text-yellow-500 mt-1 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" />
+
+              <div className="flex items-start space-x-3 pt-2 border-t border-gray-800">
+                <Clock className="w-4 h-4 text-amber-400 flex-shrink-0 mt-1" />
                 <div>
-                  <p className="text-gray-300 group-hover:text-white transition-colors duration-300">Mon - Fri: 8:00 AM - 6:00 PM</p>
-                  <p className="text-gray-300 group-hover:text-white transition-colors duration-300">Sat: 9:00 AM - 4:00 PM</p>
-                  <p className="text-gray-300 group-hover:text-white transition-colors duration-300">Sun: Closed</p>
+                  <p className="text-white font-medium">Mon - Fri: 8:00 AM - 7:00 PM</p>
+                  <p className="text-gray-400">Sat: 8:30 AM - 5:00 PM</p>
+                  <p className="text-gray-500 text-xs">Sunday: Emergency On-Call Only</p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-       
-            
+        </div>
       </div>
 
-      {/* Bottom Footer */}
-      <div className="bg-gray-800 border-t border-gray-700">
-        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 transition-all duration-1000 delay-700 ${
-          isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-        }`}>
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-gray-400 text-sm mb-4 md:mb-0">
-              <p>© 2024 AUDECK Auto Services. All rights reserved. SK-TECHNOLOGY801-BitWagon</p>
-            </div>
-            <div className="flex flex-wrap items-center space-x-6 text-sm">
-              {footerLinks.map(({ label, href }) => (
-                <li className='list-none' key={href}>
-                  <Link
-                    href={href}
-                    className="text-gray-300 hover:text-yellow-500 transition-all duration-300 flex items-center group transform hover:translate-x-2"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </div>
+      {/* Bottom Copyright Bar */}
+      <div className="border-t border-gray-800/80 bg-black/70 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+          <p>© {new Date().getFullYear()} HackMob Auto Services. All rights reserved.</p>
+          <div className="flex flex-wrap items-center gap-6">
+            {legalLinks.map((item) => (
+              <Link key={item.href} href={item.href} className="hover:text-amber-400 transition">
+                {item.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
 
-      <style jsx>{`
-        .bg-gray-750 {
-          background-color: #374151;
-        }
-      `}</style>
     </footer>
   );
 };

@@ -1,300 +1,320 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { ChevronRight, Star, Clock, Shield, Wrench, Car, CheckCircle, Phone, MapPin, Calendar } from 'lucide-react';
+import React, { useState } from "react";
+import Link from "next/link";
+import { 
+  Disc, CheckCircle2, ShieldCheck, Sparkles, 
+  ArrowRight, Phone, Clock, Wrench, Play, Pause, 
+  RotateCcw, Activity, Gauge, Sliders, AlertCircle, Flame 
+} from "lucide-react";
 
-const TireInstallationPage = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [activeService, setActiveService] = useState(0);
-  const [testimonialIndex, setTestimonialIndex] = useState(0);
+export default function TireServicePage() {
+  const [activePlan, setActivePlan] = useState(1);
 
-  useEffect(() => {
-    setIsVisible(true);
-    const testimonialInterval = setInterval(() => {
-      setTestimonialIndex(prev => (prev + 1) % testimonials.length);
-    }, 4000);
-    return () => clearInterval(testimonialInterval);
-  }, []);
+  // Interactive 3D Wheel, Laser Alignment & TPMS Simulator States
+  const [wheelSpeedMph, setWheelSpeedMph] = useState(85);
+  const [tpmsPsi, setTpmsPsi] = useState(34);
+  const [camberAngle, setCamberAngle] = useState(-1.0);
+  const [isRotating, setIsRotating] = useState(true);
 
-  const services = [
+  const isHighSpeedDrift = wheelSpeedMph > 70;
+  const tireStatus = tpmsPsi < 28 ? "Under-Inflated (Wear Risk)" : tpmsPsi > 40 ? "Over-Inflated (Harsh Ride)" : "Optimal PSI (Max Grip)";
+  const roadGripScore = Math.max(40, 100 - Math.abs(camberAngle) * 12 - (tpmsPsi < 30 ? (30 - tpmsPsi) * 4 : 0));
+
+  const packages = [
     {
-      icon: <Wrench className="w-8 h-8" />,
-      title: "Professional Installation",
-      description: "Expert technicians install your tires with precision and care",
-      price: "$25-45",
-      features: ["Wheel balancing", "Valve stem replacement", "Pressure check"]
+      title: "3D Laser Wheel Alignment",
+      price: "$79",
+      time: "45 mins",
+      desc: "Precision digital multi-axis alignment for camber, caster, and toe angles.",
+      features: [
+        "Sub-millimeter 3D laser wheel alignment",
+        "Steering angle sensor (SAS) recalibration",
+        "Tire wear pattern analysis",
+        "Suspension ball joint & tie rod check"
+      ]
     },
     {
-      icon: <Shield className="w-8 h-8" />,
-      title: "Tire Repair & Patching",
-      description: "Quick and reliable tire repair services to get you back on the road",
-      price: "$15-30",
-      features: ["Puncture repair", "Sidewall inspection", "Safety assessment"]
+      title: "Mounting, Road-Force Balancing & TPMS",
+      price: "$99",
+      time: "1 hour",
+      desc: "High-speed dynamic road force balancing, scratch-free rim mounting, and TPMS sensor programming.",
+      features: [
+        "Hunter Road Force high-speed balancing",
+        "Touchless rim mounting (up to 24\" wheels)",
+        "TPMS sensor diagnostics & sync",
+        "New rubber/metal valve stems"
+      ]
     },
     {
-      icon: <Car className="w-8 h-8" />,
-      title: "Wheel Alignment",
-      description: "Precise wheel alignment for optimal tire performance and longevity",
-      price: "$75-120",
-      features: ["4-wheel alignment", "Suspension check", "Tire wear analysis"]
-    },
-    {
-      icon: <Clock className="w-8 h-8" />,
-      title: "Express Service",
-      description: "Fast tire installation for customers on the go",
-      price: "$35-55",
-      features: ["Under 30 minutes", "While you wait", "Premium service"]
+      title: "Complete 4-Tire Performance Package",
+      price: "$499+",
+      time: "1-2 hours",
+      desc: "Brand new Michelin, Continental, or Pirelli tire set with lifetime rotations and flat repair.",
+      features: [
+        "Set of 4 premium all-season or performance tires",
+        "Free lifetime tire rotations every 5,000 miles",
+        "Free road hazard puncture repairs",
+        "3D Laser alignment included"
+      ]
     }
-  ];
-
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      rating: 5,
-      text: "Outstanding service! They had my tires installed in under 20 minutes with perfect precision.",
-      location: "Downtown Customer"
-    },
-    {
-      name: "Mike Rodriguez",
-      rating: 5,
-      text: "Best tire shop in town. Professional, fast, and reasonably priced. Highly recommend!",
-      location: "Regular Customer"
-    },
-    {
-      name: "Emily Chen",
-      rating: 5,
-      text: "Excellent customer service and quality work. My car drives like new with the new tires.",
-      location: "First-time Customer"
-    }
-  ];
-
-  const features = [
-    "State-of-the-art equipment",
-    "Certified technicians",
-    "90-day warranty",
-    "Free tire rotation",
-    "Road hazard protection",
-    "Mobile service available"
   ];
 
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="bg-[#080c14] text-gray-100 min-h-screen pt-32 sm:pt-36 pb-20 overflow-hidden">
+      
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-black via-gray-900 to-black">
-        <div className="absolute inset-0 bg-yellow-400 opacity-10"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className={`text-center transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-            <div className="inline-flex items-center px-4 py-2 bg-yellow-400 text-black rounded-full text-sm font-semibold mb-6 animate-pulse">
-              <Star className="w-4 h-4 mr-2" />
-              #1 Rated Tire Installation Service
-            </div>
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-              PROFESSIONAL
-              <span className="block text-yellow-400 text-6xl md:text-8xl animate-bounce">
-                TIRE
-              </span>
-              INSTALLATION
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-              Expert tire installation services with cutting-edge technology and unmatched precision. 
-              Get back on the road safely and quickly.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-yellow-400 text-black px-8 py-4 rounded-lg text-lg font-semibold hover:bg-yellow-300 transform hover:scale-105 transition-all duration-300 shadow-lg">
-                Book Installation
-              </button>
-              <a href="/get-quote">
-              <button className="border-2 border-yellow-400 text-yellow-400 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-yellow-400 hover:text-black transition-all duration-300">
-                Get Free Quote
-              </button>
-              </a>
-            </div>
-          </div>
-        </div>
+      <section className="relative px-4 sm:px-6 lg:px-8 pb-12 text-center max-w-4xl mx-auto">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-amber-500/10 blur-[120px] rounded-full pointer-events-none" />
         
-        {/* Animated tire graphics */}
-        <div className="absolute -bottom-10 -left-10 w-32 h-32 border-8 border-yellow-400 rounded-full animate-spin opacity-20"></div>
-        <div className="absolute -top-10 -right-10 w-24 h-24 border-8 border-yellow-400 rounded-full animate-spin opacity-30" style={{animationDirection: 'reverse'}}></div>
-      </div>
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs sm:text-sm font-semibold mb-6">
+          <Sparkles className="w-4 h-4 text-amber-400" />
+          <span>Road Grip, Balance & Alignment</span>
+        </div>
 
-      {/* Services Section */}
-      <div className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              OUR <span className="text-yellow-400">SERVICES</span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Comprehensive tire services designed to keep you safe and your vehicle performing at its best
-            </p>
-          </div>
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">
+          Performance Tires & <br />
+          <span className="gold-gradient-text">3D Laser Wheel Alignment</span>.
+        </h1>
+
+        <p className="text-base sm:text-lg text-gray-300 mt-4 max-w-2xl mx-auto leading-relaxed">
+          Eliminate high-speed steering wobble, prevent uneven tread wear, and maximize cornering stability with our Hunter road-force balancing and 3D laser alignment.
+        </p>
+
+        <div className="flex flex-wrap justify-center gap-4 mt-8">
+          <Link href="/get-quote?service=tire" className="gold-glow-btn px-8 py-3.5 rounded-xl font-bold text-sm flex items-center space-x-2">
+            <Wrench className="w-4 h-4 text-black" />
+            <span>Book Tire Service</span>
+          </Link>
+          <a href="tel:+15551234567" className="outline-glow-btn px-7 py-3.5 rounded-xl font-semibold text-sm flex items-center space-x-2">
+            <Phone className="w-4 h-4 text-amber-400" />
+            <span>(555) 123-4567</span>
+          </a>
+        </div>
+      </section>
+
+      {/* INTERACTIVE 3D WHEEL WITH DRIFT TIRE SMOKE & LASER HUD */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="glass-card rounded-3xl p-6 sm:p-8 border-amber-500/30 shadow-2xl">
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {services.map((service, index) => (
-              <div
-                key={index}
-                className={`bg-white rounded-xl p-8 shadow-lg border-2 border-transparent hover:border-yellow-400 cursor-pointer transform transition-all duration-300 hover:scale-105 ${
-                  activeService === index ? 'border-yellow-400 scale-105' : ''
-                }`}
-                onMouseEnter={() => setActiveService(index)}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 mb-6 border-b border-gray-800 gap-4">
+            <div>
+              <div className="inline-flex items-center space-x-1 text-xs font-bold text-amber-400 uppercase tracking-wider">
+                <Disc className="w-4 h-4" />
+                <span>Hunter 3D Alignment & Road-Force Telemetry</span>
+              </div>
+              <h2 className="text-2xl font-extrabold text-white mt-1">
+                Alloy Wheel High-Speed Spin & Smoke Simulator
+              </h2>
+            </div>
+            {isHighSpeedDrift && (
+              <div className="px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full border border-amber-400 text-xs font-bold animate-pulse">
+                🔥 High-Speed Track Run ({wheelSpeedMph} MPH)
+              </div>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            {/* Visual Rotating Wheel with Laser Crosshair & Smoke Puffs */}
+            <div className="lg:col-span-7 relative h-72 rounded-2xl bg-gradient-to-b from-gray-950 via-gray-900 to-black border border-gray-800 p-4 flex items-center justify-center overflow-hidden">
+              
+              {/* Animated Tire Smoke Puffs on High Speed */}
+              {isHighSpeedDrift && isRotating && (
+                <div className="absolute inset-0 pointer-events-none overflow-hidden z-20 flex items-center justify-around">
+                  {[...Array(6)].map((_, idx) => (
+                    <div
+                      key={idx}
+                      className="w-16 h-16 rounded-full bg-gray-400/20 blur-xl animate-ping"
+                      style={{
+                        animationDuration: '1.2s',
+                        animationDelay: `${idx * 0.2}s`
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Laser Alignment Crosshair Lines */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
+                <div className="w-full h-px bg-amber-400 border-t border-dashed border-amber-400" />
+                <div className="h-full w-px bg-amber-400 border-l border-dashed border-amber-400 absolute" />
+                <div className="w-56 h-56 rounded-full border border-amber-400/50 absolute" />
+              </div>
+
+              {/* 3D Rotating Wheel Assembly */}
+              <div 
+                className="relative w-48 h-48 rounded-full border-[14px] border-gray-900 shadow-2xl flex items-center justify-center transition-transform duration-300"
+                style={{
+                  transform: `rotateY(${camberAngle * 8}deg) rotateZ(${camberAngle * 4}deg)`
+                }}
               >
-                <div className="text-yellow-400 mb-4">{service.icon}</div>
-                <h3 className="text-xl font-bold mb-2">{service.title}</h3>
-                <p className="text-gray-600 mb-4">{service.description}</p>
-                <div className="text-2xl font-bold text-yellow-400 mb-4">{service.price}</div>
-                <ul className="space-y-2">
-                  {service.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center text-sm text-gray-600">
-                      <CheckCircle className="w-4 h-4 text-yellow-400 mr-2" />
-                      {feature}
+                {/* Rotating Alloy Rim Spokes */}
+                <div 
+                  className="w-36 h-36 rounded-full border-4 border-gray-700 bg-gradient-to-br from-gray-800 to-gray-950 relative flex items-center justify-center shadow-inner"
+                  style={{
+                    animation: isRotating 
+                      ? `spin ${Math.max(0.12, 3 - (wheelSpeedMph / 120) * 2.8)}s linear infinite` 
+                      : 'none'
+                  }}
+                >
+                  {[...Array(5)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="absolute w-full h-3 bg-gradient-to-r from-gray-400 via-gray-600 to-gray-400 rounded-full"
+                      style={{ transform: `rotate(${i * 72}deg)` }}
+                    />
+                  ))}
+
+                  <div className="w-12 h-12 rounded-full bg-black border-2 border-amber-400 z-10 flex items-center justify-center font-black text-[9px] text-amber-400">
+                    245/40R19
+                  </div>
+                </div>
+              </div>
+
+              {/* Real-Time Laser Alignment Angle HUD */}
+              <div className="absolute top-3 left-4 bg-gray-950/90 px-3 py-1.5 rounded-xl border border-gray-800 text-xs text-amber-400 font-bold">
+                Laser Camber: {camberAngle > 0 ? `+${camberAngle}` : camberAngle}°
+              </div>
+
+              {/* Overlay HUD */}
+              <div className="absolute bottom-3 left-4 right-4 flex justify-between items-center bg-gray-950/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-gray-800 text-xs">
+                <span className="text-gray-300 flex items-center gap-1">
+                  <Gauge className="w-3.5 h-3.5 text-amber-400" />
+                  Speed: <strong className="text-white">{wheelSpeedMph} MPH</strong>
+                </span>
+                <span className="text-gray-300 flex items-center gap-1">
+                  <Disc className="w-3.5 h-3.5 text-amber-400" />
+                  TPMS: <strong className={tpmsPsi < 28 ? "text-red-400" : "text-emerald-400"}>{tpmsPsi} PSI</strong>
+                </span>
+                <span className="text-gray-300 flex items-center gap-1">
+                  <Activity className="w-3.5 h-3.5 text-amber-400" />
+                  Road Grip: <strong className="text-amber-400">{roadGripScore}%</strong>
+                </span>
+              </div>
+
+            </div>
+
+            {/* Controls */}
+            <div className="lg:col-span-5 space-y-4">
+              {/* Wheel Speed Slider */}
+              <div>
+                <div className="flex justify-between items-center text-xs mb-1">
+                  <span className="text-gray-300 font-semibold">Simulated Wheel Speed: {wheelSpeedMph} MPH</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="120"
+                  value={wheelSpeedMph}
+                  onChange={(e) => setWheelSpeedMph(Number(e.target.value))}
+                  className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                />
+              </div>
+
+              {/* TPMS Pressure Slider */}
+              <div>
+                <div className="flex justify-between items-center text-xs mb-1">
+                  <span className="text-gray-300 font-semibold">Tire Pressure (TPMS): {tpmsPsi} PSI</span>
+                  <span className={`text-[11px] font-bold ${tpmsPsi < 28 ? "text-red-400" : "text-emerald-400"}`}>
+                    {tireStatus}
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="20"
+                  max="45"
+                  value={tpmsPsi}
+                  onChange={(e) => setTpmsPsi(Number(e.target.value))}
+                  className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                />
+              </div>
+
+              {/* Camber Angle Adjuster */}
+              <div>
+                <div className="flex justify-between items-center text-xs mb-1">
+                  <span className="text-gray-300 font-semibold">3D Laser Camber Angle: {camberAngle}°</span>
+                  <button 
+                    onClick={() => setCamberAngle(0.0)}
+                    className="text-[10px] text-amber-400 underline font-bold"
+                  >
+                    Reset to 0.0°
+                  </button>
+                </div>
+                <input
+                  type="range"
+                  min="-3.0"
+                  max="3.0"
+                  step="0.5"
+                  value={camberAngle}
+                  onChange={(e) => setCamberAngle(Number(e.target.value))}
+                  className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                />
+              </div>
+
+              <div className="flex gap-2 pt-2">
+                <button
+                  onClick={() => setIsRotating(!isRotating)}
+                  className="flex-1 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-white flex items-center justify-center gap-1.5 transition"
+                >
+                  {isRotating ? <Pause className="w-3.5 h-3.5 text-amber-400" /> : <Play className="w-3.5 h-3.5 text-amber-400" />}
+                  <span>{isRotating ? "Pause Wheel" : "Spin Wheel"}</span>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* Packages Grid */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {packages.map((pkg, idx) => (
+            <div
+              key={idx}
+              className={`glass-card rounded-3xl p-7 sm:p-8 flex flex-col justify-between cursor-pointer border ${
+                activePlan === idx ? "border-amber-400/60 shadow-2xl shadow-amber-500/15" : "border-gray-800"
+              }`}
+              onClick={() => setActivePlan(idx)}
+            >
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">{pkg.title}</h3>
+                <div className="flex items-baseline gap-2 mb-3">
+                  <span className="text-3xl sm:text-4xl font-black text-amber-400">{pkg.price}</span>
+                  <span className="text-xs text-gray-400">/ est. {pkg.time}</span>
+                </div>
+                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed mb-6">
+                  {pkg.desc}
+                </p>
+
+                <ul className="space-y-2.5 border-t border-gray-800 pt-4">
+                  {pkg.features.map((f, fIdx) => (
+                    <li key={fIdx} className="flex items-start text-xs sm:text-sm text-gray-300 space-x-2">
+                      <CheckCircle2 className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                      <span>{f}</span>
                     </li>
                   ))}
                 </ul>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
 
-      {/* Features Section */}
-      <div className="py-20 bg-black text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                WHY CHOOSE <span className="text-yellow-400">US?</span>
-              </h2>
-              <p className="text-xl text-gray-300 mb-8">
-                We combine years of experience with state-of-the-art technology to deliver 
-                exceptional tire installation services that exceed your expectations.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {features.map((feature, index) => (
-                  <div 
-                    key={index}
-                    className="flex items-center space-x-3 animate-pulse"
-                    style={{animationDelay: `${index * 0.2}s`}}
-                  >
-                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                    <span className="text-gray-300">{feature}</span>
-                  </div>
-                ))}
+              <div className="mt-8 pt-4 border-t border-gray-800">
+                <Link
+                  href={`/get-quote?service=${encodeURIComponent(pkg.title)}`}
+                  className={`w-full py-3.5 rounded-xl text-center text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition ${
+                    activePlan === idx ? "gold-glow-btn" : "bg-gray-800 hover:bg-amber-500 hover:text-black text-gray-200"
+                  }`}
+                >
+                  <span>Select Package</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
             </div>
-            <div className="relative">
-              <div className="bg-yellow-400 rounded-full w-80 h-80 mx-auto flex items-center justify-center animate-pulse">
-                <Car className="w-32 h-32 text-black" />
-              </div>
-              <div className="absolute -top-4 -right-4 w-16 h-16 bg-white rounded-full flex items-center justify-center animate-bounce">
-                <Wrench className="w-8 h-8 text-black" />
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
-      </div>
+      </section>
 
-      {/* Testimonials Section */}
-      <div className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              CUSTOMER <span className="text-yellow-400">REVIEWS</span>
-            </h2>
-            <p className="text-xl text-gray-600">
-              Don't just take our word for it - hear from our satisfied customers
-            </p>
-          </div>
-          
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-gray-50 rounded-xl p-8 shadow-lg border-l-4 border-yellow-400">
-              <div className="flex items-center mb-4">
-                {[...Array(testimonials[testimonialIndex].rating)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                ))}
-              </div>
-              <p className="text-xl text-gray-800 mb-4 italic">
-                "{testimonials[testimonialIndex].text}"
-              </p>
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center mr-4">
-                  <span className="text-black font-bold">
-                    {testimonials[testimonialIndex].name.charAt(0)}
-                  </span>
-                </div>
-                <div>
-                  <p className="font-semibold">{testimonials[testimonialIndex].name}</p>
-                  <p className="text-gray-600">{testimonials[testimonialIndex].location}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="py-20 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-400 text-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            READY TO GET STARTED?
-          </h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Book your tire installation appointment today and experience the difference 
-            professional service makes.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/contact">
-            <button className="bg-black text-yellow-400 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-800 transform hover:scale-105 transition-all duration-300 shadow-lg flex items-center justify-center">
-              <Phone className="w-5 h-5 mr-2" />
-              Call Now: (555) 123-TIRE
-            </button>
-            </a>
-            <button className="border-2 border-black text-black px-8 py-4 rounded-lg text-lg font-semibold hover:bg-black hover:text-yellow-400 transition-all duration-300 flex items-center justify-center">
-              <Calendar className="w-5 h-5 mr-2" />
-              Schedule Online
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="bg-black text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-2xl font-bold mb-4 text-yellow-400">ProTire Install</h3>
-              <p className="text-gray-300">
-                Your trusted partner for professional tire installation services. 
-                Quality, speed, and reliability guaranteed.
-              </p>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Contact Info</h4>
-              <div className="space-y-2 text-gray-300">
-                <div className="flex items-center">
-                  <Phone className="w-4 h-4 mr-2" />
-                  (555) 123-TIRE
-                </div>
-                <div className="flex items-center">
-                  <MapPin className="w-4 h-4 mr-2" />
-                  123 Auto Street, City, State 12345
-                </div>
-              </div>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Business Hours</h4>
-              <div className="space-y-1 text-gray-300">
-                <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
-                <p>Saturday: 8:00 AM - 5:00 PM</p>
-                <p>Sunday: 10:00 AM - 4:00 PM</p>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 ProTire Install. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
-};
-
-export default TireInstallationPage;
+}

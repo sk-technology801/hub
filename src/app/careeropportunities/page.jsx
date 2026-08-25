@@ -1,279 +1,197 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { ChevronRight, Car, Users, Trophy, Star, MapPin, Clock, DollarSign, ArrowRight } from 'lucide-react';
+import React, { useState } from "react";
+import Link from "next/link";
+import { 
+  ChevronRight, Car, Users, Trophy, Star, MapPin, 
+  Clock, DollarSign, ArrowRight, Sparkles, Wrench, ShieldCheck 
+} from "lucide-react";
 
-const CareerAutoPage = () => {
+export default function CareerOpportunitiesPage() {
   const [activeJob, setActiveJob] = useState(0);
-  const [isVisible, setIsVisible] = useState({});
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(prev => ({ ...prev, [entry.target.id]: true }));
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    document.querySelectorAll('[id]').forEach((el) => {
-      observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, []);
 
   const jobPositions = [
     {
-      title: "Senior Automotive Engineer",
-      department: "Engineering",
-      location: "Detroit, MI",
+      title: "Master Automotive Diagnostic Technician",
+      department: "Diagnostic & ECU Engineering",
+      location: "Silicon City Workshop",
       type: "Full-time",
-      salary: "$85,000 - $120,000",
-      description: "Lead the design and development of next-generation automotive systems with cutting-edge technology."
+      salary: "$95,000 - $130,000 / yr + Performance Bonus",
+      description: "Lead dealer-grade computerized scanning, oscilloscope telemetry analysis, and complex engine/electrical troubleshooting on European and performance platforms.",
+      requirements: [
+        "ASE Master Certified (A1-A8) or OEM Master Equivalent",
+        "5+ years advanced diagnostics experience",
+        "Proficiency with PicoScope, CAN FD, and bidirectional scanners"
+      ]
     },
     {
-      title: "Sales Representative",
-      department: "Sales",
-      location: "Multiple Locations",
+      title: "Lead Transmission & Drivetrain Specialist",
+      department: "Mechanical Drivetrain",
+      location: "Silicon City Workshop",
       type: "Full-time",
-      salary: "$45,000 - $80,000 + Commission",
-      description: "Drive sales growth by building relationships with customers and promoting our premium vehicle lineup."
+      salary: "$80,000 - $115,000 / yr",
+      description: "Perform precision overhauls, clutch pack replacements, and hydraulic calibrations on Dual-Clutch (DCT), Automatic, and manual gearboxes.",
+      requirements: [
+        "Specialized training in automatic & dual-clutch transmission rebuilds",
+        "3+ years transmission overhaul experience",
+        "High attention to mechanical tolerances and dyno bed-in"
+      ]
     },
     {
-      title: "Service Technician",
-      department: "Service",
-      location: "Los Angeles, CA",
+      title: "Service Advisor & Customer Experience Lead",
+      department: "Service Operations",
+      location: "Silicon City Customer Lounge",
       type: "Full-time",
-      salary: "$40,000 - $65,000",
-      description: "Provide expert maintenance and repair services for all vehicle models in our state-of-the-art facility."
-    },
-    {
-      title: "Digital Marketing Specialist",
-      department: "Marketing",
-      location: "Remote",
-      type: "Full-time",
-      salary: "$50,000 - $70,000",
-      description: "Create compelling digital campaigns that showcase our vehicles and drive customer engagement."
+      salary: "$65,000 - $95,000 / yr + Commission",
+      description: "Deliver exceptional transparency to drivers by presenting digital inspection reports, coordinating work orders, and ensuring complete customer delight.",
+      requirements: [
+        "Proven background in automotive service writing",
+        "Excellent communication and digital inspection workflow skills",
+        "Passion for customer satisfaction and honest recommendations"
+      ]
     }
   ];
 
   const benefits = [
-    { icon: <Trophy className="w-6 h-6" />, title: "Competitive Salary", desc: "Top-tier compensation packages" },
-    { icon: <Star className="w-6 h-6" />, title: "Health Benefits", desc: "Comprehensive medical coverage" },
-    { icon: <Users className="w-6 h-6" />, title: "Team Culture", desc: "Collaborative work environment" },
-    { icon: <Car className="w-6 h-6" />, title: "Vehicle Discounts", desc: "Exclusive employee pricing" }
+    { icon: Trophy, title: "Top-Tier Compensation", desc: "Industry-leading base pay with weekly productivity bonuses." },
+    { icon: Star, title: "Paid Master Training", desc: "100% company-funded ASE, EV & OEM factory certifications." },
+    { icon: Users, title: "State-of-the-Art Bays", desc: "Air-conditioned workshop with new Hunter & Snap-on equipment." },
+    { icon: Car, title: "Health, 401(k) & Discounts", desc: "Comprehensive medical, 401(k) match, and free vehicle parts/labor." }
   ];
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans">
+    <div className="bg-[#080c14] text-gray-100 min-h-screen pt-32 sm:pt-36 pb-20 overflow-hidden">
+      
       {/* Hero Section */}
-      <section className="relative bg-black text-white overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-transparent z-10"></div>
-        <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/10 via-transparent to-yellow-400/5 bg-cover bg-center"></div>
+      <section className="relative px-4 sm:px-6 lg:px-8 pb-12 text-center max-w-4xl mx-auto">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-amber-500/10 blur-[120px] rounded-full pointer-events-none" />
         
-        <div className="relative z-20 container mx-auto px-6 py-24 lg:py-32">
-          <div className="max-w-4xl">
-            <div className="overflow-hidden">
-              <h1 className="text-5xl lg:text-7xl font-bold mb-6 animate-[slideUp_1s_ease-out]">
-                Drive Your
-                <span className="text-yellow-400 block">Career Forward</span>
-              </h1>
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs sm:text-sm font-semibold mb-6">
+          <Sparkles className="w-4 h-4 text-amber-400" />
+          <span>Join the HackMob Master Engineering Team</span>
+        </div>
+
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">
+          Accelerate Your <span className="gold-gradient-text">Automotive Career</span>.
+        </h1>
+
+        <p className="text-base sm:text-lg text-gray-300 mt-4 max-w-2xl mx-auto">
+          Work alongside the city's finest ASE Master Technicians in an air-conditioned, cutting-edge facility with industry-leading pay and company-funded factory certifications.
+        </p>
+      </section>
+
+      {/* Benefits Grid */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {benefits.map((b, idx) => (
+            <div key={idx} className="glass-card rounded-2xl p-6 border-gray-800 text-center">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto mb-4 text-amber-400">
+                <b.icon className="w-6 h-6" />
+              </div>
+              <h3 className="text-base font-bold text-white mb-1">{b.title}</h3>
+              <p className="text-xs text-gray-400 leading-relaxed">{b.desc}</p>
             </div>
-            
-            <div className="overflow-hidden">
-              <p className="text-xl lg:text-2xl mb-8 text-gray-300 animate-[slideUp_1s_ease-out_0.2s_both]">
-                Join the automotive industry's most innovative team and accelerate your professional journey
-              </p>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4 animate-[slideUp_1s_ease-out_0.4s_both]">
-              <button className="bg-yellow-400 text-black px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
-                View Open Positions
-                <ChevronRight className="w-5 h-5" />
-              </button>
-              <button className="border-2 border-yellow-400 text-yellow-400 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-400 hover:text-black transition-all duration-300 transform hover:scale-105">
-                Learn More
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { number: "500+", label: "Employees" },
-              { number: "15+", label: "Years Experience" },
-              { number: "50+", label: "Open Positions" },
-              { number: "98%", label: "Employee Satisfaction" }
-            ].map((stat, index) => (
-              <div key={index} className="text-center group">
-                <div className="text-4xl lg:text-5xl font-bold text-black mb-2 group-hover:text-yellow-600 transition-colors duration-300">
-                  {stat.number}
-                </div>
-                <div className="text-gray-600 font-medium">{stat.label}</div>
-              </div>
-            ))}
-          </div>
+      {/* Job Openings Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">Available Roles</span>
+          <h2 className="text-3xl font-extrabold text-white mt-1">Current Open Positions</h2>
         </div>
-      </section>
 
-      {/* Job Positions */}
-      <section id="jobs" className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <div className={`text-center mb-16 transition-all duration-1000 ${isVisible.jobs ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <h2 className="text-4xl lg:text-5xl font-bold text-black mb-4">
-              Current <span className="text-yellow-500">Opportunities</span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Discover exciting career paths in the automotive industry
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-8">
-            {/* Job List */}
-            <div className="lg:col-span-1">
-              <div className="space-y-4">
-                {jobPositions.map((job, index) => (
-                  <div
-                    key={index}
-                    onClick={() => setActiveJob(index)}
-                    className={`p-6 rounded-lg cursor-pointer transition-all duration-300 ${
-                      activeJob === index 
-                        ? 'bg-yellow-400 text-black shadow-lg scale-105' 
-                        : 'bg-gray-50 hover:bg-gray-100'
-                    }`}
-                  >
-                    <h3 className="font-bold text-lg mb-2">{job.title}</h3>
-                    <p className="text-sm opacity-80">{job.department}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Job Details */}
-            <div className="lg:col-span-2">
-              <div className="bg-black text-white p-8 rounded-lg transform transition-all duration-500">
-                <div className="mb-6">
-                  <h3 className="text-3xl font-bold mb-4 text-yellow-400">
-                    {jobPositions[activeJob].title}
-                  </h3>
-                  <p className="text-gray-300 text-lg leading-relaxed">
-                    {jobPositions[activeJob].description}
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                  <div className="flex items-center gap-3">
-                    <MapPin className="w-5 h-5 text-yellow-400" />
-                    <span>{jobPositions[activeJob].location}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Clock className="w-5 h-5 text-yellow-400" />
-                    <span>{jobPositions[activeJob].type}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <DollarSign className="w-5 h-5 text-yellow-400" />
-                    <span>{jobPositions[activeJob].salary}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Users className="w-5 h-5 text-yellow-400" />
-                    <span>{jobPositions[activeJob].department}</span>
-                  </div>
-                </div>
-
-                <button className="bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-all duration-300 transform hover:scale-105 flex items-center gap-2">
-                  Apply Now
-                  <ArrowRight className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits */}
-      <section id="benefits" className="py-20 bg-gray-900 text-white">
-        <div className="container mx-auto px-6">
-          <div className={`text-center mb-16 transition-all duration-1000 ${isVisible.benefits ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <h2 className="text-4xl lg:text-5xl font-bold mb-4">
-              Why Choose <span className="text-yellow-400">Us?</span>
-            </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              We offer comprehensive benefits that support your career and lifestyle
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {benefits.map((benefit, index) => (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Job List (4 cols) */}
+          <div className="lg:col-span-4 space-y-3">
+            {jobPositions.map((job, idx) => (
               <div
-                key={index}
-                className={`text-center p-6 rounded-lg bg-gray-800 hover:bg-gray-700 transition-all duration-500 transform hover:scale-105 ${
-                  isVisible.benefits ? 'animate-[fadeInUp_0.6s_ease-out]' : 'opacity-0'
+                key={idx}
+                onClick={() => setActiveJob(idx)}
+                className={`p-5 rounded-2xl cursor-pointer transition-all border ${
+                  activeJob === idx
+                    ? "bg-amber-500/15 border-amber-400 shadow-lg shadow-amber-500/10"
+                    : "bg-gray-950/80 border-gray-800 hover:border-gray-700"
                 }`}
-                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="text-yellow-400 mb-4 flex justify-center">
-                  {benefit.icon}
-                </div>
-                <h3 className="text-xl font-bold mb-2">{benefit.title}</h3>
-                <p className="text-gray-400">{benefit.desc}</p>
+                <h3 className={`text-sm font-bold ${activeJob === idx ? "text-amber-300" : "text-white"}`}>
+                  {job.title}
+                </h3>
+                <p className="text-xs text-gray-400 mt-1">{job.department}</p>
+                <span className="inline-block mt-2 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-gray-900 border border-gray-800 text-gray-300">
+                  {job.type}
+                </span>
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-yellow-400 text-black">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-            Ready to Start Your Journey?
-          </h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Join our team of automotive professionals and help shape the future of transportation
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-black text-white px-8 py-4 rounded-lg font-semibold hover:bg-gray-800 transition-all duration-300 transform hover:scale-105">
-              Browse All Jobs
-            </button>
-            <button className="border-2 border-black text-black px-8 py-4 rounded-lg font-semibold hover:bg-black hover:text-white transition-all duration-300 transform hover:scale-105">
-              Submit Resume
-            </button>
+          {/* Job Details Box (8 cols) */}
+          <div className="lg:col-span-8">
+            <div className="glass-panel rounded-3xl p-8 border-gray-800 shadow-2xl space-y-6">
+              <div>
+                <span className="text-xs font-semibold text-amber-400 uppercase tracking-wider">
+                  {jobPositions[activeJob].department}
+                </span>
+                <h3 className="text-2xl font-bold text-white mt-1">
+                  {jobPositions[activeJob].title}
+                </h3>
+                <div className="flex flex-wrap gap-4 text-xs text-gray-300 mt-3">
+                  <span className="flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5 text-amber-400" />
+                    {jobPositions[activeJob].location}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-3.5 h-3.5 text-amber-400" />
+                    {jobPositions[activeJob].type}
+                  </span>
+                  <span className="flex items-center gap-1 text-amber-300 font-bold">
+                    <DollarSign className="w-3.5 h-3.5 text-amber-400" />
+                    {jobPositions[activeJob].salary}
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-bold text-white mb-2">Role Overview</h4>
+                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                  {jobPositions[activeJob].description}
+                </p>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-bold text-white mb-2">Key Qualifications</h4>
+                <ul className="space-y-2">
+                  {jobPositions[activeJob].requirements.map((req, rIdx) => (
+                    <li key={rIdx} className="flex items-start text-xs sm:text-sm text-gray-300 space-x-2">
+                      <ShieldCheck className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                      <span>{req}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="pt-4 border-t border-gray-800 flex flex-wrap gap-4">
+                <Link
+                  href="/contact"
+                  className="gold-glow-btn px-8 py-3.5 rounded-xl font-bold text-sm flex items-center space-x-2"
+                >
+                  <span>Apply for This Role</span>
+                  <ArrowRight className="w-4 h-4 text-black" />
+                </Link>
+                <a
+                  href="mailto:careers@hackmobauto.com"
+                  className="outline-glow-btn px-6 py-3.5 rounded-xl font-semibold text-xs sm:text-sm"
+                >
+                  Send Resume Directly
+                </a>
+              </div>
+            </div>
           </div>
+
         </div>
       </section>
 
-      <style jsx>{`
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </div>
   );
-};
-
-export default CareerAutoPage;
+}

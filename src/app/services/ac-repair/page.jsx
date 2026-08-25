@@ -1,330 +1,276 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { Phone, MapPin, Clock, Star, CheckCircle, Wrench, Thermometer, Wind, Snowflake, Car, Calendar, Users, Award } from 'lucide-react';
+import React, { useState } from "react";
+import Link from "next/link";
+import { 
+  Wind, CheckCircle2, ShieldCheck, Sparkles, 
+  ArrowRight, Phone, Clock, Wrench, Play, Pause, 
+  Thermometer, Snowflake, Activity, Zap 
+} from "lucide-react";
 
-const ACRepairService = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [activeService, setActiveService] = useState(0);
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+export default function ACRepairServicePage() {
+  const [activePlan, setActivePlan] = useState(1);
 
-  useEffect(() => {
-    setIsVisible(true);
-    const interval = setInterval(() => {
-      setCurrentTestimonial(prev => (prev + 1) % 3);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
+  // Interactive AC Refrigerant & Climate Simulator States
+  const [targetTempF, setTargetTempF] = useState(36);
+  const [fanSpeed, setFanSpeed] = useState(4);
+  const [refrigerantType, setRefrigerantType] = useState("R134a");
+  const [isCompressorOn, setIsCompressorOn] = useState(true);
 
-  const services = [
+  const isSubZeroIce = isCompressorOn && targetTempF < 40;
+  const highSidePsi = isCompressorOn ? (180 + (85 - targetTempF) * 2.2).toFixed(0) : "45";
+  const lowSidePsi = isCompressorOn ? (28 + (targetTempF - 35) * 0.4).toFixed(0) : "45";
+  const airConditioningState = !isCompressorOn ? "Vent Blowing (Compressor Off)" : targetTempF < 40 ? "Freezing Sub-Zero Ice ❄️" : "Comfort Cooling";
+
+  const packages = [
     {
-      icon: <Thermometer className="w-8 h-8" />,
-      title: "AC System Diagnosis",
-      description: "Complete diagnostic testing to identify AC issues quickly and accurately.",
-      price: "$89"
+      title: "AC Performance Test & Diagnostic",
+      price: "$49",
+      time: "30 mins",
+      desc: "Digital vent temperature measurement, manifold gauge pressure test, and belt check.",
+      features: [
+        "Vent temperature differential measurement",
+        "High & low pressure line gauge readings",
+        "AC compressor clutch & relay test",
+        "Cabin pollen air filter inspection"
+      ]
     },
     {
-      icon: <Wind className="w-8 h-8" />,
-      title: "Compressor Repair",
-      description: "Professional compressor repair and replacement services for all car models.",
-      price: "$299"
+      title: "Full Evac, UV Leak Test & Recharge",
+      price: "$119",
+      time: "1 hour",
+      desc: "Complete vacuum evacuation, UV leak dye injection, and pure factory R134a/R1234yf refrigerant recharge.",
+      features: [
+        "Complete moisture & old gas evacuation",
+        "PAG synthetic compressor oil top-off",
+        "UV fluorescing leak detection check",
+        "Factory-specified pure refrigerant recharge",
+        "24-Month Warranty Protection"
+      ]
     },
     {
-      icon: <Snowflake className="w-8 h-8" />,
-      title: "Refrigerant Recharge",
-      description: "Eco-friendly refrigerant recharge to restore your AC's cooling power.",
-      price: "$149"
-    },
-    {
-      icon: <Car className="w-8 h-8" />,
-      title: "Full AC Service",
-      description: "Complete AC system service including cleaning, testing, and maintenance.",
-      price: "$199"
+      title: "Complete Climate System Overhaul",
+      price: "$499+",
+      time: "2-4 hours",
+      desc: "New OEM AC compressor, receiver drier, condenser coil flush, and cabin antimicrobial ozone sanitization.",
+      features: [
+        "Brand new OEM AC compressor & clutch",
+        "New receiver drier / accumulator installation",
+        "Evaporator & condenser coil ultrasonic flush",
+        "Cabin antimicrobial duct ozone treatment",
+        "Ice-cold vent temperature guarantee"
+      ]
     }
-  ];
-
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      rating: 5,
-      text: "Amazing service! My car AC was fixed in no time. The team was professional and the pricing was fair.",
-      car: "Honda Civic 2020"
-    },
-    {
-      name: "Mike Rodriguez",
-      rating: 5,
-      text: "Best AC repair service in town. They diagnosed the problem quickly and had me back on the road with cool air.",
-      car: "Toyota Camry 2019"
-    },
-    {
-      name: "Emily Chen",
-      rating: 5,
-      text: "Excellent work and great customer service. My AC is working better than ever. Highly recommend!",
-      car: "BMW X3 2021"
-    }
-  ];
-
-  const stats = [
-    { icon: <Users className="w-6 h-6" />, number: "5000+", label: "Happy Customers" },
-    { icon: <Wrench className="w-6 h-6" />, number: "15+", label: "Years Experience" },
-    { icon: <Award className="w-6 h-6" />, number: "98%", label: "Success Rate" },
-    { icon: <Clock className="w-6 h-6" />, number: "24/7", label: "Support Available" }
   ];
 
   return (
-    <div className="min-h-screen bg-white text-black overflow-hidden">
-
+    <div className="bg-[#080c14] text-gray-100 min-h-screen pt-32 sm:pt-36 pb-20 overflow-hidden">
+      
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-black via-gray-900 to-black text-white py-20 px-6 overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-32 h-32 bg-yellow-400 rounded-full animate-pulse"></div>
-          <div className="absolute bottom-20 right-20 w-24 h-24 bg-yellow-400 rounded-full animate-bounce"></div>
-          <div className="absolute top-1/2 left-1/3 w-16 h-16 bg-yellow-400 rounded-full animate-ping"></div>
-        </div>
+      <section className="relative px-4 sm:px-6 lg:px-8 pb-12 text-center max-w-4xl mx-auto">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-cyan-500/10 blur-[120px] rounded-full pointer-events-none" />
         
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
-          <div className={`transform transition-all duration-1000 ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}>
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              Beat the Heat with 
-              <span className="text-yellow-400 block animate-pulse">Expert AC Repair</span>
-            </h2>
-            <p className="text-xl mb-8 text-gray-300">
-              Professional automotive AC repair and maintenance services. Get your car's cooling system running like new with our certified technicians.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-yellow-400 text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-yellow-300 transition-all transform hover:scale-105 shadow-lg">
-                Schedule Service
-              </button>
-              <a href="/get-quote">
-              <button className="border-2 border-yellow-400 text-yellow-400 px-8 py-4 rounded-full font-bold text-lg hover:bg-yellow-400 hover:text-black transition-all transform hover:scale-105">
-                Get Quote
-              </button>
-              </a>
-            </div>
-          </div>
-          
-          <div className={`transform transition-all duration-1000 delay-300 ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}>
-            <div className="relative">
-              <div className="bg-gradient-to-r from-yellow-400 to-yellow-300 p-8 rounded-3xl shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-300">
-                <div className="bg-white p-6 rounded-2xl text-black">
-                  <h3 className="text-2xl font-bold mb-4 text-center">Emergency Service</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-green-500" />
-                      <span>24/7 Available</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-green-500" />
-                      <span>Same Day Service</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-green-500" />
-                      <span>All Car Models</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-green-500" />
-                      <span>Certified Technicians</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-cyan-300 text-xs sm:text-sm font-semibold mb-6">
+          <Sparkles className="w-4 h-4 text-cyan-400" />
+          <span>Ice-Cold Cabin Climate Guarantee</span>
+        </div>
+
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">
+          Climate Control & <br />
+          <span className="gold-gradient-text">Auto AC Repair Service</span>.
+        </h1>
+
+        <p className="text-base sm:text-lg text-gray-300 mt-4 max-w-2xl mx-auto leading-relaxed">
+          Stay cool and comfortable all year. We provide EPA-certified refrigerant recharges (R134a & modern R1234yf), precision leak detection, and compressor repairs.
+        </p>
+
+        <div className="flex flex-wrap justify-center gap-4 mt-8">
+          <Link href="/get-quote?service=ac" className="gold-glow-btn px-8 py-3.5 rounded-xl font-bold text-sm flex items-center space-x-2">
+            <Wrench className="w-4 h-4 text-black" />
+            <span>Book AC Service</span>
+          </Link>
+          <a href="tel:+15551234567" className="outline-glow-btn px-7 py-3.5 rounded-xl font-semibold text-sm flex items-center space-x-2">
+            <Phone className="w-4 h-4 text-amber-400" />
+            <span>(555) 123-4567</span>
+          </a>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 px-6 bg-yellow-400">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center transform hover:scale-110 transition-transform duration-300">
-                <div className="bg-black text-yellow-400 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  {stat.icon}
-                </div>
-                <div className="text-3xl font-bold text-black mb-2">{stat.number}</div>
-                <div className="text-black font-semibold">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section className="py-20 px-6 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Our Services</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Complete automotive AC solutions for all makes and models
-            </p>
-          </div>
+      {/* INTERACTIVE SUB-ZERO AC SIMULATOR WITH ICE CRYSTALS */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="glass-card rounded-3xl p-6 sm:p-8 border-cyan-500/30 shadow-2xl relative">
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {services.map((service, index) => (
-              <div 
-                key={index}
-                className={`bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer border-2 ${
-                  activeService === index ? 'border-yellow-400 bg-yellow-50' : 'border-transparent'
-                }`}
-                onMouseEnter={() => setActiveService(index)}
-              >
-                <div className="text-yellow-400 mb-4">{service.icon}</div>
-                <h3 className="text-xl font-bold mb-3">{service.title}</h3>
-                <p className="text-gray-600 mb-4">{service.description}</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-2xl font-bold text-black">{service.price}</span>
-                  <button className="bg-black text-white px-4 py-2 rounded-full hover:bg-yellow-400 hover:text-black transition-colors">
-                    Book Now
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+          {/* Top border glowing frost effect */}
+          {isSubZeroIce && (
+            <div className="absolute inset-0 rounded-3xl border-2 border-cyan-400/60 shadow-[0_0_30px_rgba(6,182,212,0.4)] pointer-events-none animate-pulse" />
+          )}
 
-      {/* Testimonials Section */}
-      <section className="py-20 px-6 bg-black text-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">What Our Customers Say</h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Real feedback from satisfied customers
-            </p>
-          </div>
-          
-          <div className="relative max-w-4xl mx-auto">
-            <div className="overflow-hidden">
-              <div 
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}
-              >
-                {testimonials.map((testimonial, index) => (
-                  <div key={index} className="w-full flex-shrink-0 px-8">
-                    <div className="bg-white text-black p-8 rounded-2xl shadow-2xl">
-                      <div className="flex items-center mb-4">
-                        {[...Array(testimonial.rating)].map((_, i) => (
-                          <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                        ))}
-                      </div>
-                      <p className="text-lg mb-6 italic">"{testimonial.text}"</p>
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
-                          <span className="font-bold text-black">{testimonial.name.charAt(0)}</span>
-                        </div>
-                        <div>
-                          <h4 className="font-bold">{testimonial.name}</h4>
-                          <p className="text-gray-600">{testimonial.car}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 mb-6 border-b border-gray-800 gap-4">
+            <div>
+              <div className="inline-flex items-center space-x-1 text-xs font-bold text-cyan-400 uppercase tracking-wider">
+                <Snowflake className="w-4 h-4 animate-spin" style={{ animationDuration: '10s' }} />
+                <span>Dual-Zone Refrigerant Loop Simulation</span>
               </div>
+              <h2 className="text-2xl font-extrabold text-white mt-1">
+                Compressor Cycle & Sub-Zero Vent Temperature
+              </h2>
             </div>
-            
-            <div className="flex justify-center mt-8 space-x-2">
-              {testimonials.map((_, index) => (
+
+            <div className="flex gap-2 bg-gray-950 p-1.5 rounded-2xl border border-gray-800 text-xs">
+              {["R134a", "R1234yf"].map((gas) => (
                 <button
-                  key={index}
-                  className={`w-3 h-3 rounded-full transition-colors ${
-                    currentTestimonial === index ? 'bg-yellow-400' : 'bg-gray-600'
+                  key={gas}
+                  onClick={() => setRefrigerantType(gas)}
+                  className={`px-3 py-1.5 rounded-xl font-semibold transition ${
+                    refrigerantType === gas
+                      ? "bg-cyan-500 text-black font-bold shadow-md shadow-cyan-500/20"
+                      : "text-gray-400 hover:text-white"
                   }`}
-                  onClick={() => setCurrentTestimonial(index)}
-                />
+                >
+                  {gas} Spec
+                </button>
               ))}
             </div>
           </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            {/* Visual Evaporator & Cooling Flow Box with Frost FX */}
+            <div className="lg:col-span-7 relative h-72 rounded-2xl bg-gradient-to-b from-gray-950 via-gray-900 to-black border border-gray-800 p-4 flex flex-col justify-between overflow-hidden">
+              
+              {/* Cold Air Particle Flow Stream */}
+              <div className="relative w-full h-44 flex items-center justify-around overflow-hidden">
+                {[...Array(12)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="flex flex-col items-center space-y-3"
+                    style={{
+                      animation: isCompressorOn ? `float ${Math.max(0.8, 3.2 - fanSpeed * 0.6)}s ease-in-out infinite` : 'none',
+                      animationDelay: `${i * 0.2}s`
+                    }}
+                  >
+                    <Snowflake className={`w-5 h-5 ${isSubZeroIce ? "text-cyan-300 animate-spin" : isCompressorOn ? "text-cyan-400" : "text-gray-600"}`} style={{ animationDuration: '6s' }} />
+                    <div className="w-1.5 h-8 bg-gradient-to-b from-cyan-400 via-cyan-200 to-transparent rounded-full opacity-70" />
+                  </div>
+                ))}
+              </div>
+
+              {/* Real-time Vent Temperature Display */}
+              <div className="relative z-10 flex justify-between items-center bg-gray-950/85 backdrop-blur-md px-4 py-2 rounded-xl border border-gray-800 text-xs">
+                <span className="text-gray-300 flex items-center gap-1.5">
+                  <Thermometer className="w-4 h-4 text-cyan-400" />
+                  Vent Temp: <strong className="text-cyan-400 text-sm font-black">{isCompressorOn ? `${targetTempF}°F` : "78°F"}</strong>
+                </span>
+                <span className="text-gray-300">
+                  High: <strong className="text-amber-400">{highSidePsi} PSI</strong> | Low: <strong className="text-cyan-400">{lowSidePsi} PSI</strong>
+                </span>
+              </div>
+
+            </div>
+
+            {/* Controls */}
+            <div className="lg:col-span-5 space-y-4">
+              <div>
+                <div className="flex justify-between items-center text-xs mb-1">
+                  <span className="text-gray-300 font-semibold">Thermostat Target Temperature: {targetTempF}°F</span>
+                  <span className="text-cyan-400 font-bold">{airConditioningState}</span>
+                </div>
+                <input
+                  type="range"
+                  min="35"
+                  max="70"
+                  value={targetTempF}
+                  onChange={(e) => setTargetTempF(Number(e.target.value))}
+                  className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">
+                  Blower Fan Speed Level
+                </label>
+                <div className="grid grid-cols-4 gap-2">
+                  {[1, 2, 3, 4].map((speed) => (
+                    <button
+                      key={speed}
+                      onClick={() => setFanSpeed(speed)}
+                      className={`py-2 rounded-xl text-xs font-bold transition-all border ${
+                        fanSpeed === speed
+                          ? "bg-cyan-500 text-black border-cyan-400 font-black shadow-md shadow-cyan-500/25"
+                          : "bg-gray-950 border-gray-800 text-gray-300 hover:border-gray-700"
+                      }`}
+                    >
+                      Speed {speed}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-1">
+                <button
+                  onClick={() => setIsCompressorOn(!isCompressorOn)}
+                  className={`flex-1 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition ${
+                    isCompressorOn ? "bg-cyan-500 text-black shadow-lg shadow-cyan-500/20" : "bg-gray-800 text-gray-300"
+                  }`}
+                >
+                  <Snowflake className="w-3.5 h-3.5" />
+                  <span>{isCompressorOn ? "A/C Compressor: ON" : "A/C Compressor: OFF"}</span>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-6 bg-gradient-to-r from-yellow-400 to-yellow-300">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
-            Ready to Cool Down?
-          </h2>
-          <p className="text-xl text-black mb-8 max-w-2xl mx-auto">
-            Don't let a broken AC ruin your drive. Contact us today for fast, reliable service.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/contact">
-            <button className="bg-black text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-800 transition-all transform hover:scale-105 shadow-lg">
-              <Phone className="w-5 h-5 inline mr-2" />
-              Call Now: (555) 123-COOL
-            </button>
-            </a>
-            <button className="border-2 border-black text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-black hover:text-white transition-all transform hover:scale-105">
-              <Calendar className="w-5 h-5 inline mr-2" />
-              Book Online
-            </button>
-          </div>
+      {/* Packages Grid */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {packages.map((pkg, idx) => (
+            <div
+              key={idx}
+              className={`glass-card rounded-3xl p-7 sm:p-8 flex flex-col justify-between cursor-pointer border ${
+                activePlan === idx ? "border-amber-400/60 shadow-2xl shadow-amber-500/15" : "border-gray-800"
+              }`}
+              onClick={() => setActivePlan(idx)}
+            >
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">{pkg.title}</h3>
+                <div className="flex items-baseline gap-2 mb-3">
+                  <span className="text-3xl sm:text-4xl font-black text-amber-400">{pkg.price}</span>
+                  <span className="text-xs text-gray-400">/ est. {pkg.time}</span>
+                </div>
+                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed mb-6">
+                  {pkg.desc}
+                </p>
+
+                <ul className="space-y-2.5 border-t border-gray-800 pt-4">
+                  {pkg.features.map((f, fIdx) => (
+                    <li key={fIdx} className="flex items-start text-xs sm:text-sm text-gray-300 space-x-2">
+                      <CheckCircle2 className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-8 pt-4 border-t border-gray-800">
+                <Link
+                  href={`/get-quote?service=${encodeURIComponent(pkg.title)}`}
+                  className={`w-full py-3.5 rounded-xl text-center text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition ${
+                    activePlan === idx ? "gold-glow-btn" : "bg-gray-800 hover:bg-amber-500 hover:text-black text-gray-200"
+                  }`}
+                >
+                  <span>Select Package</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-black text-white py-12 px-6">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-8">
-          <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center">
-                <Snowflake className="w-5 h-5 text-black" />
-              </div>
-              <h3 className="text-xl font-bold">CoolCar AC</h3>
-            </div>
-            <p className="text-gray-400">Your trusted automotive AC repair specialists since 2008.</p>
-          </div>
-          
-          <div>
-            <h4 className="font-bold mb-4">Services</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li>AC Diagnosis</li>
-              <li>Compressor Repair</li>
-              <li>Refrigerant Recharge</li>
-              <li>Full AC Service</li>
-            </ul>
-          </div>
-          
-          <div>
-            <h4 className="font-bold mb-4">Contact Info</h4>
-            <div className="space-y-2 text-gray-400">
-              <div className="flex items-center space-x-2">
-                <Phone className="w-4 h-4" />
-                <span>(555) 123-COOL</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="w-4 h-4" />
-                <span>123 Auto St, Car City</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Clock className="w-4 h-4" />
-                <span>Mon-Fri: 8AM-6PM</span>
-              </div>
-            </div>
-          </div>
-          
-          <div>
-            <h4 className="font-bold mb-4">Follow Us</h4>
-            <div className="flex space-x-4">
-              <div className="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center cursor-pointer hover:bg-yellow-300 transition-colors">
-                <span className="text-black font-bold text-sm">f</span>
-              </div>
-              <div className="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center cursor-pointer hover:bg-yellow-300 transition-colors">
-                <span className="text-black font-bold text-sm">t</span>
-              </div>
-              <div className="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center cursor-pointer hover:bg-yellow-300 transition-colors">
-                <span className="text-black font-bold text-sm">i</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; 2025 CoolCar AC. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
-};
-
-export default ACRepairService;
+}

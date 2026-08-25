@@ -1,190 +1,88 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { ChevronDown, Scale, Shield, Users, FileText, AlertTriangle, Eye, Clock } from 'lucide-react';
+import React, { useState } from "react";
+import Link from "next/link";
+import { ChevronDown, Scale, Shield, Users, FileText, AlertTriangle, Sparkles } from "lucide-react";
 
-const AnimatedTOSPage = () => {
+export default function TermsOfServicePage() {
   const [activeSection, setActiveSection] = useState(null);
-  const [scrollY, setScrollY] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    setIsVisible(true);
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const sections = [
     {
-      id: 'acceptance',
-      title: 'Acceptance of Terms',
-      icon: <Scale className="w-6 h-6" />,
-      content: 'By accessing and using our service, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.'
+      id: "estimates",
+      title: "100% Price Lock & Digital Estimates",
+      icon: Scale,
+      content: "All estimates generated via our digital health inspection system are guaranteed price-locked upon customer authorization. No additional labor or parts charges will be incurred without prior written or digital customer approval."
     },
     {
-      id: 'privacy',
-      title: 'Privacy & Data Protection',
-      icon: <Shield className="w-6 h-6" />,
-      content: 'We are committed to protecting your privacy. Your personal information is collected, used, and shared in accordance with our Privacy Policy. We implement appropriate security measures to protect your data.'
+      id: "warranty",
+      title: "24-Month / 24,000-Mile Nationwide Warranty",
+      icon: Shield,
+      content: "Standard mechanical and electronic repairs performed by HackMob Master Technicians are covered by our 24-Month or 24,000-Mile nationwide warranty covering both parts and labor, subject to standard vehicle operating conditions."
     },
     {
-      id: 'user-conduct',
-      title: 'User Conduct',
-      icon: <Users className="w-6 h-6" />,
-      content: 'Users must not engage in any activity that disrupts or interferes with our services. This includes but is not limited to: harassment, spam, malicious code distribution, or any illegal activities.'
+      id: "authorization",
+      title: "Vehicle Authorization & Diagnostic Testing",
+      icon: FileText,
+      content: "By reserving a service bay or authorizing work, you grant our certified technicians permission to operate your vehicle on public roads for computerized diagnostics, quality control testing, and final safety bed-in."
     },
     {
-      id: 'intellectual-property',
-      title: 'Intellectual Property',
-      icon: <FileText className="w-6 h-6" />,
-      content: 'All content, features, and functionality of our service are owned by us and are protected by international copyright, trademark, and other intellectual property laws.'
-    },
-    {
-      id: 'disclaimers',
-      title: 'Disclaimers & Limitations',
-      icon: <AlertTriangle className="w-6 h-6" />,
-      content: 'Our service is provided "as is" without warranties of any kind. We are not liable for any damages arising from the use of our service, including but not limited to direct, indirect, or consequential damages.'
-    },
-    {
-      id: 'monitoring',
-      title: 'Monitoring & Enforcement',
-      icon: <Eye className="w-6 h-6" />,
-      content: 'We reserve the right to monitor user activity and enforce these terms. Violation of these terms may result in suspension or termination of your account without prior notice.'
-    },
-    {
-      id: 'updates',
-      title: 'Terms Updates',
-      icon: <Clock className="w-6 h-6" />,
-      content: 'We may update these terms from time to time. Users will be notified of significant changes. Continued use of the service after updates constitutes acceptance of the new terms.'
+      id: "pickup",
+      title: "Vehicle Completion & Express Valet Pickup",
+      icon: Users,
+      content: "Vehicles must be retrieved within 48 hours of service completion notice, unless prior arrangements (such as complimentary valet delivery or extended staging) have been scheduled with your service advisor."
     }
   ];
 
-  const toggleSection = (sectionId) => {
-    setActiveSection(activeSection === sectionId ? null : sectionId);
-  };
+  const toggleSection = (id) => setActiveSection(activeSection === id ? null : id);
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div 
-          className="absolute top-20 left-10 w-32 h-32 bg-yellow-400 rounded-full opacity-10 animate-pulse"
-          style={{ transform: `translateY(${scrollY * 0.1}px)` }}
-        />
-        <div 
-          className="absolute top-40 right-20 w-24 h-24 bg-yellow-300 rounded-full opacity-20 animate-bounce"
-          style={{ transform: `translateY(${scrollY * -0.05}px)` }}
-        />
-        <div 
-          className="absolute bottom-32 left-1/3 w-40 h-40 bg-yellow-500 rounded-full opacity-5"
-          style={{ transform: `translateY(${scrollY * 0.15}px)` }}
-        />
-      </div>
-
-      {/* Header */}
-      <header className="relative z-10 py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <div 
-            className={`transform transition-all duration-1000 ${
-              isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-            }`}
-          >
-            <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-yellow-400 to-white bg-clip-text text-transparent animate-pulse">
-              Terms of Service
-            </h1>
-            <div className="w-32 h-1 bg-yellow-400 mx-auto mb-8 animate-pulse" />
-            <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
-              Clear, transparent terms that govern our relationship with you
-            </p>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="relative z-10 max-w-4xl mx-auto px-6 pb-20">
-        {/* Last Updated */}
-        <div className="text-center mb-16">
-          <div className="inline-block bg-yellow-400 bg-opacity-20 rounded-full px-6 py-3 border border-yellow-400 border-opacity-30">
-            <p className="text-yellow-400 font-medium">
-              Last Updated: January 15, 2025
-            </p>
-          </div>
+    <div className="bg-[#080c14] text-gray-100 min-h-screen pt-32 sm:pt-36 pb-20 overflow-hidden">
+      
+      {/* Hero */}
+      <section className="relative px-4 sm:px-6 lg:px-8 pb-12 text-center max-w-4xl mx-auto">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-amber-500/10 blur-[120px] rounded-full pointer-events-none" />
+        
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs sm:text-sm font-semibold mb-6">
+          <Sparkles className="w-4 h-4 text-amber-400" />
+          <span>HackMob Auto Services Agreement</span>
         </div>
 
-        {/* Sections */}
-        <div className="space-y-6">
-          {sections.map((section, index) => (
-            <div
-              key={section.id}
-              className={`transform transition-all duration-700 delay-${index * 100} ${
-                isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'
-              }`}
-            >
-              <div className="bg-white bg-opacity-5 backdrop-blur-sm rounded-2xl border border-white border-opacity-10 overflow-hidden hover:bg-opacity-10 transition-all duration-300">
-                <button
-                  onClick={() => toggleSection(section.id)}
-                  className="w-full p-8 text-left flex items-center justify-between hover:bg-yellow-400 hover:bg-opacity-5 transition-all duration-300 group"
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className="p-3 bg-yellow-400 bg-opacity-20 rounded-xl group-hover:bg-opacity-30 transition-all duration-300">
-                      {section.icon}
-                    </div>
-                    <h2 className="text-2xl font-bold group-hover:text-yellow-400 transition-colors duration-300">
-                      {section.title}
-                    </h2>
-                  </div>
-                  <ChevronDown 
-                    className={`w-6 h-6 transition-transform duration-300 ${
-                      activeSection === section.id ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-                
-                <div className={`overflow-hidden transition-all duration-500 ${
-                  activeSection === section.id ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                }`}>
-                  <div className="p-8 pt-0">
-                    <div className="h-px bg-gradient-to-r from-transparent via-yellow-400 to-transparent mb-6" />
-                    <p className="text-gray-300 text-lg leading-relaxed">
-                      {section.content}
-                    </p>
-                  </div>
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">
+          Terms of <span className="gold-gradient-text">Service</span>.
+        </h1>
+
+        <p className="text-base sm:text-lg text-gray-300 mt-4 max-w-2xl mx-auto">
+          Clear, transparent terms designed to protect drivers, guarantee warranty coverage, and ensure complete peace of mind.
+        </p>
+      </section>
+
+      {/* Accordion list */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
+        {sections.map((s) => {
+          const isActive = activeSection === s.id;
+          const Icon = s.icon;
+          return (
+            <div key={s.id} className="glass-panel rounded-2xl border border-gray-800 overflow-hidden">
+              <button
+                onClick={() => toggleSection(s.id)}
+                className="w-full px-6 py-5 text-left flex items-center justify-between text-base sm:text-lg font-bold text-white hover:text-amber-400 transition"
+              >
+                <div className="flex items-center space-x-3">
+                  <Icon className="w-5 h-5 text-amber-400 flex-shrink-0" />
+                  <span>{s.title}</span>
                 </div>
-              </div>
+                <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${isActive ? "rotate-180 text-amber-400" : ""}`} />
+              </button>
+              {isActive && (
+                <div className="px-6 pb-5 pt-1 text-sm text-gray-300 leading-relaxed border-t border-gray-800/80">
+                  {s.content}
+                </div>
+              )}
             </div>
-          ))}
-        </div>
+          );
+        })}
+      </section>
 
-        {/* Contact Section */}
-        <div className="mt-20 text-center">
-          <div className="bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-400 rounded-3xl p-8 text-black">
-            <h3 className="text-3xl font-bold mb-4">Questions About These Terms?</h3>
-            <p className="text-lg mb-6 opacity-80">
-              We're here to help clarify anything that might be unclear.
-            </p>
-            <button className="bg-black text-yellow-400 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-900 transition-colors duration-300 transform hover:scale-105">
-              Contact Legal Team
-            </button>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <footer className="mt-20 text-center text-gray-500">
-          <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent mb-8" />
-          <p className="text-sm">
-            These terms are effective as of the date listed above and supersede all prior agreements.
-          </p>
-        </footer>
-      </main>
-
-      {/* Floating Elements */}
-      <div className="fixed bottom-8 right-8 z-20">
-        <div className="bg-yellow-400 bg-opacity-20 backdrop-blur-sm rounded-full p-4 border border-yellow-400 border-opacity-30 animate-pulse">
-          <Scale className="w-6 h-6 text-yellow-400" />
-        </div>
-      </div>
     </div>
   );
-};
-
-export default AnimatedTOSPage;
+}

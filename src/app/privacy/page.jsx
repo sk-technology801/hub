@@ -1,197 +1,88 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { ChevronDown, Shield, Eye, Lock, Database, Users, Mail, AlertCircle } from 'lucide-react';
+import React, { useState } from "react";
+import Link from "next/link";
+import { ChevronDown, Shield, Eye, Lock, Database, Users, Mail, AlertCircle, Sparkles } from "lucide-react";
 
-const PrivacyPolicyPage = () => {
+export default function PrivacyPolicyPage() {
   const [activeSection, setActiveSection] = useState(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    setIsVisible(true);
-    
-    const handleScroll = () => {
-      const scrolled = window.scrollY;
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      setScrollProgress((scrolled / maxScroll) * 100);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const sections = [
     {
-      id: 'data-collection',
-      title: 'Data Collection',
+      id: "data-collection",
+      title: "Vehicle & Personal Data Collection",
       icon: Database,
-      content: `We collect information you provide directly to us, such as when you create an account, make a purchase, or contact us. This includes personal information like your name, email address, phone number, and payment information. We also automatically collect certain information about your device and usage patterns through cookies and similar technologies.`
+      content: "We collect information necessary to perform accurate computerized diagnostics and maintenance on your vehicle. This includes your contact details (name, email, phone number) and vehicle identification data (VIN, year, make, model, odometer mileage, diagnostic trouble codes, and service history)."
     },
     {
-      id: 'data-usage',
-      title: 'How We Use Your Data',
+      id: "data-usage",
+      title: "How We Utilize Your Data",
       icon: Eye,
-      content: `Your information helps us provide, maintain, and improve our services. We use it to process transactions, send you important updates, personalize your experience, and ensure the security of our platform. We may also use aggregated, non-personally identifiable information for analytics and research purposes.`
+      content: "Your vehicle data is utilized strictly to provide digital vehicle health inspection reports, track maintenance intervals, honor your 24-Month / 24,000-Mile Warranty, and provide transparent upfront pricing. We never sell or monetize customer data."
     },
     {
-      id: 'data-sharing',
-      title: 'Data Sharing',
-      icon: Users,
-      content: `We do not sell, trade, or rent your personal information to third parties. We may share your information with trusted service providers who help us operate our business, but only under strict confidentiality agreements. We may also disclose information when required by law or to protect our rights and safety.`
-    },
-    {
-      id: 'security',
-      title: 'Security Measures',
+      id: "security",
+      title: "Security & Encryption Protocols",
       icon: Lock,
-      content: `We implement industry-standard security measures to protect your personal information. This includes encryption, secure servers, regular security audits, and access controls. However, no method of transmission over the internet is 100% secure, and we cannot guarantee absolute security.`
+      content: "All customer records, work orders, and digital inspection photos are stored on encrypted, access-controlled cloud servers complying with modern cybersecurity and privacy standards."
     },
     {
-      id: 'your-rights',
-      title: 'Your Rights',
-      icon: Shield,
-      content: `You have the right to access, update, or delete your personal information. You can also opt-out of certain communications and request a copy of your data. If you're in the EU, you have additional rights under GDPR. Contact us to exercise any of these rights.`
-    },
-    {
-      id: 'contact',
-      title: 'Contact Us',
+      id: "contact",
+      title: "Privacy Inquiries & Data Rights",
       icon: Mail,
-      content: `If you have any questions about this Privacy Policy or our data practices, please contact us at privacy@company.com or write to us at our mailing address. We're committed to addressing your concerns promptly and transparently.`
+      content: "You have full rights to request an export of your complete service history or request deletion of personal records. For inquiries, contact privacy@hackmobauto.com."
     }
   ];
 
-  const toggleSection = (sectionId) => {
-    setActiveSection(activeSection === sectionId ? null : sectionId);
-  };
+  const toggleSection = (id) => setActiveSection(activeSection === id ? null : id);
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans">
-      {/* Progress Bar */}
-      <div className="fixed top-0 left-0 w-full h-1 bg-black bg-opacity-10 z-50">
-        <div 
-          className="h-full bg-gradient-to-r from-yellow-400 to-yellow-600 transition-all duration-300 ease-out"
-          style={{ width: `${scrollProgress}%` }}
-        />
-      </div>
-
-      {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-yellow-50 to-yellow-100 py-20">
-        <div className="absolute inset-0 bg-black bg-opacity-5" />
-        <div className="relative max-w-6xl mx-auto px-6">
-          <div className={`text-center transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-yellow-400 rounded-full mb-6 shadow-lg">
-              <Shield className="w-10 h-10 text-black" />
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent">
-              Privacy Policy
-            </h1>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-              Your privacy is our priority. Learn how we collect, use, and protect your information with complete transparency.
-            </p>
-            <div className="mt-8 text-sm text-gray-600 bg-white bg-opacity-70 rounded-lg p-4 inline-block">
-              <AlertCircle className="w-4 h-4 inline mr-2" />
-              Last updated: July 12, 2025
-            </div>
-          </div>
-        </div>
+    <div className="bg-[#080c14] text-gray-100 min-h-screen pt-32 sm:pt-36 pb-20 overflow-hidden">
+      
+      {/* Hero */}
+      <section className="relative px-4 sm:px-6 lg:px-8 pb-12 text-center max-w-4xl mx-auto">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-amber-500/10 blur-[120px] rounded-full pointer-events-none" />
         
-        {/* Animated Background Elements */}
-        <div className="absolute top-10 left-10 w-20 h-20 bg-yellow-300 rounded-full opacity-20 animate-pulse" />
-        <div className="absolute bottom-10 right-10 w-32 h-32 bg-yellow-400 rounded-full opacity-10 animate-bounce" />
-        <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-black rounded-full opacity-5 animate-pulse" />
-      </div>
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs sm:text-sm font-semibold mb-6">
+          <Sparkles className="w-4 h-4 text-amber-400" />
+          <span>HackMob Auto Services Privacy Charter</span>
+        </div>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-6 py-16">
-        <div className="space-y-6">
-          {sections.map((section, index) => {
-            const Icon = section.icon;
-            const isActive = activeSection === section.id;
-            
-            return (
-              <div 
-                key={section.id}
-                className={`transform transition-all duration-500 ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}
-                style={{ transitionDelay: `${index * 100}ms` }}
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">
+          Privacy <span className="gold-gradient-text">Policy</span>.
+        </h1>
+
+        <p className="text-base sm:text-lg text-gray-300 mt-4 max-w-2xl mx-auto">
+          Your privacy and vehicle security are paramount. Learn how we handle your information with 100% transparency.
+        </p>
+      </section>
+
+      {/* Accordion list */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
+        {sections.map((s) => {
+          const isActive = activeSection === s.id;
+          const Icon = s.icon;
+          return (
+            <div key={s.id} className="glass-panel rounded-2xl border border-gray-800 overflow-hidden">
+              <button
+                onClick={() => toggleSection(s.id)}
+                className="w-full px-6 py-5 text-left flex items-center justify-between text-base sm:text-lg font-bold text-white hover:text-amber-400 transition"
               >
-                <div className="bg-white border-2 border-gray-100 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                  <button
-                    onClick={() => toggleSection(section.id)}
-                    className="w-full p-6 text-left flex items-center justify-between hover:bg-yellow-50 transition-colors duration-200"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-300 ${
-                        isActive ? 'bg-yellow-400 shadow-lg' : 'bg-gray-100'
-                      }`}>
-                        <Icon className={`w-6 h-6 ${isActive ? 'text-black' : 'text-gray-600'}`} />
-                      </div>
-                      <h2 className="text-2xl font-bold text-gray-900">{section.title}</h2>
-                    </div>
-                    <ChevronDown 
-                      className={`w-6 h-6 text-gray-500 transition-transform duration-300 ${
-                        isActive ? 'rotate-180' : ''
-                      }`} 
-                    />
-                  </button>
-                  
-                  <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                    isActive ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                  }`}>
-                    <div className="p-6 pt-0 bg-gradient-to-r from-yellow-50 to-white">
-                      <div className="bg-white rounded-lg p-6 shadow-inner">
-                        <p className="text-gray-700 leading-relaxed text-lg">
-                          {section.content}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                <div className="flex items-center space-x-3">
+                  <Icon className="w-5 h-5 text-amber-400 flex-shrink-0" />
+                  <span>{s.title}</span>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+                <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${isActive ? "rotate-180 text-amber-400" : ""}`} />
+              </button>
+              {isActive && (
+                <div className="px-6 pb-5 pt-1 text-sm text-gray-300 leading-relaxed border-t border-gray-800/80">
+                  {s.content}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </section>
 
-        {/* Key Highlights Section */}
-        <div className="mt-16 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-2xl p-8 text-black shadow-xl">
-          <h2 className="text-3xl font-bold mb-6 text-center">Key Highlights</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-black bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-8 h-8" />
-              </div>
-              <h3 className="font-bold text-lg mb-2">Protected Data</h3>
-              <p className="text-sm opacity-80">Your information is encrypted and secured</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-black bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Eye className="w-8 h-8" />
-              </div>
-              <h3 className="font-bold text-lg mb-2">Full Transparency</h3>
-              <p className="text-sm opacity-80">Clear information about data usage</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-black bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8" />
-              </div>
-              <h3 className="font-bold text-lg mb-2">Your Control</h3>
-              <p className="text-sm opacity-80">Manage your privacy preferences</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="mt-16 text-center p-8 bg-gray-50 rounded-2xl">
-          <p className="text-gray-600 mb-4">
-            Questions about our privacy practices? We're here to help.
-          </p>
-          <a href="/contact">
-          <button className="bg-yellow-400 hover:bg-yellow-500 text-black px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
-            Contact Privacy Team
-          </button>
-          </a>
-        </div>
-      </div>
     </div>
   );
-};
-
-export default PrivacyPolicyPage;
+}

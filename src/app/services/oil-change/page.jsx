@@ -1,427 +1,304 @@
-"use client"
-import React, { useState, useEffect } from 'react';
-import { ChevronDown, Wrench, Clock, Shield, Star, MapPin, Phone, Mail, Car, Zap, Award, CheckCircle, ArrowRight, Calendar, Users, Gauge } from 'lucide-react';
+"use client";
+import React, { useState } from "react";
+import Link from "next/link";
+import { 
+  Droplets, CheckCircle2, ShieldCheck, Sparkles, 
+  ArrowRight, Phone, Clock, Wrench, Play, Pause, 
+  RotateCcw, Activity, Thermometer, Sliders 
+} from "lucide-react";
+import { 
+  MotionFadeUp, MotionSlideLeft, MotionSlideRight, 
+  MotionZoomPop, MotionFlip3D, MotionStaggerContainer, 
+  MotionStaggerItem 
+} from "../../components/motion-wrapper";
 
-const OilChangeService = () => {
-  const [selectedService, setSelectedService] = useState('');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [animateCounter, setAnimateCounter] = useState(false);
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+export default function OilChangePage() {
+  const [activePlan, setActivePlan] = useState(1);
 
-  const services = [
-    {
-      id: 'conventional',
-      name: 'Conventional Oil Change',
-      price: '$29.99',
-      originalPrice: '$39.99',
-      description: 'Standard oil change with conventional motor oil',
-      duration: '30 minutes',
-      includes: ['Oil change', 'Filter replacement', 'Fluid top-off', 'Basic inspection'],
-      popular: false,
-      gradient: 'from-gray-100 to-gray-200',
-      icon: '🔧'
+  // Interactive Lubrication Chamber & Viscosity Stream Simulator
+  const [oilGrade, setOilGrade] = useState("synthetic");
+  const [oilTempF, setOilTempF] = useState(195);
+  const [isFlowing, setIsFlowing] = useState(true);
+
+  const oilSpecs = {
+    conventional: {
+      name: "Conventional 5W-30",
+      filmStrength: "Moderate (3,000 Mile Interval)",
+      breakdownTemp: 230,
+      flowSpeed: 2.2,
+      color: "#d97706"
     },
-    {
-      id: 'synthetic-blend',
-      name: 'Synthetic Blend Oil Change',
-      price: '$39.99',
-      originalPrice: '$49.99',
-      description: 'Premium blend for better engine protection',
-      duration: '30 minutes',
-      includes: ['Premium blend oil', 'High-quality filter', 'Fluid top-off', 'Multi-point inspection'],
-      popular: true,
-      gradient: 'from-yellow-100 to-yellow-200',
-      icon: '⚡'
+    blend: {
+      name: "Synthetic Blend 5W-30",
+      filmStrength: "High (5,000 Mile Interval)",
+      breakdownTemp: 255,
+      flowSpeed: 1.6,
+      color: "#f59e0b"
     },
-    {
-      id: 'full-synthetic',
-      name: 'Full Synthetic Oil Change',
-      price: '$49.99',
-      originalPrice: '$59.99',
-      description: 'Maximum protection with full synthetic oil',
-      duration: '45 minutes',
-      includes: ['Full synthetic oil', 'Premium filter', 'Complete fluid check', 'Comprehensive inspection'],
-      popular: false,
-      gradient: 'from-yellow-200 to-yellow-300',
-      icon: '🛡️'
-    },
-    {
-      id: 'high-mileage',
-      name: 'High Mileage Oil Change',
-      price: '$44.99',
-      originalPrice: '$54.99',
-      description: 'Special formula for vehicles over 75,000 miles',
-      duration: '35 minutes',
-      includes: ['High-mileage formula', 'Seal conditioner', 'Leak prevention', 'Senior vehicle care'],
-      popular: false,
-      gradient: 'from-blue-100 to-blue-200',
-      icon: '🚗'
+    synthetic: {
+      name: "Euro Full Synthetic 0W-40 (Liqui Moly)",
+      filmStrength: "Ultra High (10,000 Mile Interval)",
+      breakdownTemp: 295,
+      flowSpeed: 1.0,
+      color: "#fbbf24"
     }
-  ];
-
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      rating: 5,
-      comment: "Incredibly fast service! My car feels brand new after the synthetic oil change.",
-      vehicle: "2019 Honda Civic"
-    },
-    {
-      name: "Mike Chen",
-      rating: 5,
-      comment: "Professional staff and transparent pricing. I trust them with my family's vehicles.",
-      vehicle: "2021 Toyota Camry"
-    },
-    {
-      name: "Lisa Rodriguez",
-      rating: 5,
-      comment: "Been coming here for 3 years. Consistently excellent service every time!",
-      vehicle: "2018 Ford Explorer"
-    }
-  ];
-
-  const stats = [
-    { number: '15000+', label: 'Happy Customers', icon: Users },
-    { number: '99.9%', label: 'Satisfaction Rate', icon: Star },
-    { number: '20min', label: 'Average Service Time', icon: Clock },
-    { number: '5+', label: 'Years Experience', icon: Award }
-  ];
-
-  useEffect(() => {
-    setAnimateCounter(true);
-    const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleServiceSelect = (service) => {
-    setSelectedService(service);
-    setIsDropdownOpen(false);
   };
 
-  const AnimatedCounter = ({ target, suffix = '' }) => {
-    const [count, setCount] = useState(0);
-    
-    useEffect(() => {
-      if (!animateCounter) return;
-      
-      const isPercentage = target.includes('%');
-      const isTime = target.includes('min');
-      const targetNumber = parseInt(target.replace(/[^0-9]/g, ''));
-      
-      let start = 0;
-      const increment = targetNumber / 50;
-      const timer = setInterval(() => {
-        start += increment;
-        if (start >= targetNumber) {
-          setCount(targetNumber);
-          clearInterval(timer);
-        } else {
-          setCount(Math.floor(start));
-        }
-      }, 30);
-      
-      return () => clearInterval(timer);
-    }, [target, animateCounter]);
+  const currentSpec = oilSpecs[oilGrade];
+  const isOverheating = oilTempF > currentSpec.breakdownTemp;
 
-    return (
-      <span className="text-4xl font-bold text-yellow-400">
-        {count.toLocaleString()}{target.includes('%') ? '%' : target.includes('min') ? 'min' : '+'}
-      </span>
-    );
-  };
+  const packages = [
+    {
+      title: "Conventional Quick Lube",
+      price: "$49",
+      time: "20-30 mins",
+      desc: "Up to 5 quarts of quality conventional motor oil and standard spin-on filter.",
+      features: [
+        "Up to 5 qts conventional motor oil",
+        "New standard spin-on oil filter",
+        "Check & top off vital under-hood fluids",
+        "Tire pressure inspection"
+      ]
+    },
+    {
+      title: "Full Synthetic Protection",
+      price: "$79",
+      time: "30-40 mins",
+      desc: "Up to 6 quarts of full synthetic Mobil1/Castrol Edge with OEM filter and 50-point check.",
+      features: [
+        "Up to 6 qts Full Synthetic motor oil",
+        "OEM-grade high-efficiency oil filter",
+        "50-Point Digital Video Health Inspection",
+        "Chassis lubrication & suspension check",
+        "24-Month Warranty Coverage"
+      ]
+    },
+    {
+      title: "Euro Master Liqui Moly Track Spec",
+      price: "$129",
+      time: "45 mins",
+      desc: "German Liqui Moly/Motul 300V racing synthetic with Ceratec anti-friction additive.",
+      features: [
+        "German Liqui Moly / Motul Synthetic",
+        "Ceratec ceramic micro-wear protection",
+        "Mann / Mahle OEM German filter",
+        "Digital health inspection sent to phone",
+        "Comprehensive engine diagnostics scan"
+      ]
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-yellow-50">
-   
-      {/* Hero Section with Animated Background */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-yellow-400/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-yellow-300/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-yellow-400/5 to-transparent rounded-full blur-3xl animate-spin-slow"></div>
+    <div className="bg-[#080c14] text-gray-100 min-h-screen pt-32 sm:pt-36 pb-20 overflow-hidden">
+      
+      {/* Hero Section (FADE UP) */}
+      <MotionFadeUp className="relative px-4 sm:px-6 lg:px-8 pb-12 text-center max-w-4xl mx-auto">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-amber-500/10 blur-[120px] rounded-full pointer-events-none" />
+        
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs sm:text-sm font-semibold mb-6">
+          <Sparkles className="w-4 h-4 text-amber-400" />
+          <span>Hydrodynamic Film Protection</span>
         </div>
 
-        <div className="relative z-10 text-center px-4 max-w-6xl mx-auto">
-          <div className="inline-flex items-center space-x-2 bg-black text-yellow-400 px-4 py-2 rounded-full text-sm font-semibold mb-8 animate-bounce">
-            <Zap className="w-4 h-4" />
-            <span>Premium Oil Change Services</span>
-          </div>
-          
-          <h1 className="text-7xl md:text-8xl font-black mb-6 bg-gradient-to-r from-black via-gray-800 to-black bg-clip-text text-transparent leading-tight">
-            NEXT-LEVEL
-            <br />
-            <span className="text-yellow-400">OIL CHANGE</span>
-          </h1>
-          
-          <p className="text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Experience the future of automotive care with our lightning-fast, 
-            precision-engineered oil change services that keep your engine purring.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/contact">
-            <button className="group bg-black text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 shadow-2xl">
-              <span className="flex items-center">
-                Book Instantly
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </span>
-            </button>
-            </a>
-            <a href="/services/brake">
-            <button className="group bg-yellow-400 text-black px-8 py-4 rounded-2xl font-bold text-lg hover:bg-yellow-300 transition-all duration-300 transform hover:scale-105 shadow-2xl">
-              <span className="flex items-center">
-                <Calendar className="w-5 h-5 mr-2" />
-                Schedule Service
-              </span>
-            </button>
-            </a>
-          </div>
-        </div>
-      </section>
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">
+          Full Synthetic Oil & <br />
+          <span className="gold-gradient-text">Engine Lubrication Service</span>.
+        </h1>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-black">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="bg-yellow-400 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <stat.icon className="w-8 h-8 text-black" />
-                </div>
-                <AnimatedCounter target={stat.number} />
-                <p className="text-white text-sm mt-2">{stat.label}</p>
+        <p className="text-base sm:text-lg text-gray-300 mt-4 max-w-2xl mx-auto leading-relaxed">
+          Shield your engine against friction wear, heat breakdown, and carbon sludge. We exclusively use OEM factory-certified lubricants and high-flow micro-glass filters.
+        </p>
+
+        <div className="flex flex-wrap justify-center gap-4 mt-8">
+          <Link href="/get-quote?service=oil" className="gold-glow-btn px-8 py-3.5 rounded-xl font-bold text-sm flex items-center space-x-2">
+            <Wrench className="w-4 h-4 text-black" />
+            <span>Book Oil Service</span>
+          </Link>
+          <a href="tel:+15551234567" className="outline-glow-btn px-7 py-3.5 rounded-xl font-semibold text-sm flex items-center space-x-2">
+            <Phone className="w-4 h-4 text-amber-400" />
+            <span>(555) 123-4567</span>
+          </a>
+        </div>
+      </MotionFadeUp>
+
+      {/* INTERACTIVE LUBRICATION CHAMBER (ZOOM POP) */}
+      <MotionZoomPop className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="glass-card rounded-3xl p-6 sm:p-8 border-amber-500/30 shadow-2xl">
+          
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 mb-6 border-b border-gray-800 gap-4">
+            <div>
+              <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-amber-400 uppercase tracking-wider">
+                <Droplets className="w-4 h-4" />
+                <span>Engine Oil Hydrodynamic Viscosity Simulator</span>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Advanced Service Selector */}
-      <section className="py-20 bg-gradient-to-br from-white to-yellow-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h3 className="text-5xl font-bold text-black mb-4">Choose Your Experience</h3>
-              <p className="text-xl text-gray-600">Tailored services for every vehicle and budget</p>
-            </div>
-            
-            {/* Custom Dropdown with Animation */}
-            <div className="relative mb-12">
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="w-full bg-white border-3 border-yellow-400 rounded-3xl px-8 py-6 flex items-center justify-between text-left hover:border-yellow-500 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:scale-[1.02]"
-              >
-                <div className="flex items-center space-x-4">
-                  <div className="bg-yellow-400 w-12 h-12 rounded-2xl flex items-center justify-center">
-                    <Car className="w-6 h-6 text-black" />
-                  </div>
-                  <div>
-                    <span className="text-xl font-bold text-black block">
-                      {selectedService ? selectedService.name : 'Select Your Perfect Service'}
-                    </span>
-                    <span className="text-gray-500 text-sm">
-                      {selectedService ? `${selectedService.duration} • ${selectedService.includes.length} services included` : 'Choose from our premium service options'}
-                    </span>
-                  </div>
-                </div>
-                <ChevronDown className={`w-6 h-6 text-black transform transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              {isDropdownOpen && (
-                <div className="absolute top-full left-0 right-0 bg-white border-3 border-yellow-400 rounded-3xl mt-4 shadow-2xl z-20 overflow-hidden">
-                  {services.map((service, index) => (
-                    <button
-                      key={service.id}
-                      onClick={() => handleServiceSelect(service)}
-                      className={`w-full px-8 py-6 text-left hover:bg-gradient-to-r ${service.gradient} transition-all duration-300 border-b border-gray-100 last:border-b-0 relative overflow-hidden group`}
-                    >
-                      {service.popular && (
-                        <div className="absolute top-4 right-4 bg-yellow-400 text-black text-xs font-bold px-3 py-1 rounded-full">
-                          MOST POPULAR
-                        </div>
-                      )}
-                      
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-3 mb-2">
-                            <span className="text-2xl">{service.icon}</span>
-                            <h4 className="font-bold text-black text-lg">{service.name}</h4>
-                          </div>
-                          <p className="text-gray-600 mb-3">{service.description}</p>
-                          <div className="flex flex-wrap gap-2">
-                            {service.includes.map((item, idx) => (
-                              <span key={idx} className="bg-white/80 text-black text-xs px-2 py-1 rounded-full border border-gray-200">
-                                {item}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="text-right ml-6">
-                          <div className="mb-2">
-                            <span className="text-2xl font-bold text-yellow-600">{service.price}</span>
-                            <span className="text-sm text-gray-400 line-through ml-2">{service.originalPrice}</span>
-                          </div>
-                          <div className="flex items-center text-sm text-gray-500">
-                            <Clock className="w-4 h-4 mr-1" />
-                            {service.duration}
-                          </div>
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
+              <h2 className="text-2xl font-extrabold text-white mt-1">
+                Molecular Film Strength & Thermal Flow Bench
+              </h2>
             </div>
 
-            {/* Enhanced Selected Service Display */}
-            {selectedService && (
-              <div className="bg-gradient-to-r from-white to-yellow-50 border-3 border-yellow-400 rounded-3xl p-8 shadow-2xl transform animate-in">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center space-x-4">
-                    <div className="bg-yellow-400 w-16 h-16 rounded-2xl flex items-center justify-center text-2xl">
-                      {selectedService.icon}
-                    </div>
-                    <div>
-                      <h4 className="text-3xl font-bold text-black">{selectedService.name}</h4>
-                      <p className="text-gray-600 text-lg">{selectedService.description}</p>
-                    </div>
-                  </div>
-                  {selectedService.popular && (
-                    <div className="bg-yellow-400 text-black px-4 py-2 rounded-full font-bold text-sm">
-                      ⭐ MOST POPULAR
-                    </div>
-                  )}
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div>
-                    <h5 className="text-xl font-bold text-black mb-4">What's Included</h5>
-                    <div className="space-y-3">
-                      {selectedService.includes.map((item, idx) => (
-                        <div key={idx} className="flex items-center space-x-3">
-                          <CheckCircle className="w-5 h-5 text-yellow-600 flex-shrink-0" />
-                          <span className="text-gray-700">{item}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div className="text-right">
-                    <div className="mb-4">
-                      <span className="text-5xl font-bold text-yellow-600">{selectedService.price}</span>
-                      <span className="text-xl text-gray-400 line-through ml-3">{selectedService.originalPrice}</span>
-                    </div>
-                    <div className="flex items-center justify-end space-x-4 text-gray-500 mb-6">
-                      <span className="flex items-center">
-                        <Clock className="w-4 h-4 mr-1" />
-                        {selectedService.duration}
-                      </span>
-                      <span className="flex items-center">
-                        <Shield className="w-4 h-4 mr-1" />
-                        Guaranteed
-                      </span>
-                    </div>
-                    <button className="bg-black text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 shadow-xl">
-                      Book This Service →
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Carousel */}
-      <section className="py-20 bg-black">
-        <div className="container mx-auto px-4">
-          <h3 className="text-4xl font-bold text-center mb-12 text-white">What Our Customers Say</h3>
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-3xl p-8 shadow-2xl">
-              <div className="flex items-center space-x-1 mb-4">
-                {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                ))}
-              </div>
-              <p className="text-xl text-gray-700 mb-6 italic">"{testimonials[currentTestimonial].comment}"</p>
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="font-bold text-black">{testimonials[currentTestimonial].name}</p>
-                  <p className="text-gray-500">{testimonials[currentTestimonial].vehicle}</p>
-                </div>
-                <div className="flex space-x-2">
-                  {testimonials.map((_, index) => (
-                    <div
-                      key={index}
-                      className={`w-3 h-3 rounded-full ${index === currentTestimonial ? 'bg-yellow-400' : 'bg-gray-300'}`}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section with Modern Design */}
-      <section className="py-20 bg-gradient-to-br from-yellow-400 to-yellow-500">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h3 className="text-4xl font-bold text-black mb-12">Ready to Experience Excellence?</h3>
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="flex gap-1.5 bg-gray-950 p-1.5 rounded-2xl border border-gray-800 text-xs">
               {[
-                { icon: MapPin, title: "Visit Us", info: "123 Main Street\nCity, State 12345" },
-                { icon: Phone, title: "Call Now", info: "(555) 123-4567\nOpen 7 Days a Week" },
-                { icon: Mail, title: "Email", info: "info@quicklubepro.com\n24/7 Support" }
-              ].map((contact, index) => (
-                <div key={index} className="bg-white/20 backdrop-blur-lg rounded-3xl p-6 hover:bg-white/30 transition-all duration-300">
-                  <div className="bg-black w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <contact.icon className="w-8 h-8 text-yellow-400" />
-                  </div>
-                  <h4 className="text-xl font-bold text-black mb-2">{contact.title}</h4>
-                  <p className="text-black/80 whitespace-pre-line">{contact.info}</p>
-                </div>
+                { id: "conventional", label: "Conventional" },
+                { id: "blend", label: "Synthetic Blend" },
+                { id: "synthetic", label: "Full Synthetic" }
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setOilGrade(tab.id)}
+                  className={`px-3 py-1.5 rounded-xl font-semibold transition ${
+                    oilGrade === tab.id
+                      ? "bg-amber-500 text-black font-bold shadow-md shadow-amber-500/20"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  {tab.label}
+                </button>
               ))}
             </div>
           </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            {/* Visual Lubrication Flow Box */}
+            <div className="lg:col-span-7 relative h-72 rounded-2xl bg-gradient-to-b from-gray-950 via-gray-900 to-black border border-gray-800 p-4 flex flex-col justify-between overflow-hidden">
+              
+              {/* Particle Stream */}
+              <div className="relative w-full h-44 flex items-center justify-around overflow-hidden">
+                {[...Array(10)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="flex flex-col items-center space-y-2"
+                    style={{
+                      animation: isFlowing ? `float ${currentSpec.flowSpeed}s ease-in-out infinite` : 'none',
+                      animationDelay: `${i * 0.15}s`
+                    }}
+                  >
+                    <div 
+                      className="w-3.5 h-3.5 rounded-full shadow-lg transition-colors duration-300"
+                      style={{
+                        backgroundColor: isOverheating ? '#ef4444' : currentSpec.color,
+                        boxShadow: `0 0 10px ${isOverheating ? '#ef4444' : currentSpec.color}`
+                      }}
+                    />
+                    <div 
+                      className="w-1.5 h-12 rounded-full opacity-60 transition-colors duration-300"
+                      style={{ backgroundColor: isOverheating ? '#ef4444' : currentSpec.color }}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Status Readout HUD */}
+              <div className="relative z-10 flex justify-between items-center bg-gray-950/80 backdrop-blur-md px-4 py-2 rounded-xl border border-gray-800 text-xs">
+                <span className="text-gray-300 flex items-center gap-1">
+                  <Thermometer className="w-3.5 h-3.5 text-amber-400" />
+                  Oil Temp: <strong className={isOverheating ? "text-red-400" : "text-amber-400"}>{oilTempF}°F</strong>
+                </span>
+                <span className="text-gray-300">
+                  Hydrodynamic Status: <strong className={isOverheating ? "text-red-400" : "text-emerald-400"}>
+                    {isOverheating ? "⚠️ Thermal Breakdown Risk" : "✅ 100% Film Integrity"}
+                  </strong>
+                </span>
+              </div>
+
+            </div>
+
+            {/* Controls */}
+            <div className="lg:col-span-5 space-y-4">
+              <div>
+                <div className="flex justify-between items-center text-xs mb-1.5">
+                  <span className="text-gray-300 font-semibold">Simulated Engine Oil Temperature: {oilTempF}°F</span>
+                  <span className="text-amber-400 font-bold">Max: {currentSpec.breakdownTemp}°F</span>
+                </div>
+                <input
+                  type="range"
+                  min="120"
+                  max="310"
+                  value={oilTempF}
+                  onChange={(e) => setOilTempF(Number(e.target.value))}
+                  className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                />
+              </div>
+
+              <div className="bg-gray-950 p-4 rounded-xl border border-gray-800 space-y-2 text-xs">
+                <div className="flex justify-between text-gray-300">
+                  <span>Selected Grade:</span>
+                  <strong className="text-amber-400">{currentSpec.name}</strong>
+                </div>
+                <div className="flex justify-between text-gray-300">
+                  <span>Film Shear Strength:</span>
+                  <strong className="text-white">{currentSpec.filmStrength}</strong>
+                </div>
+                <div className="flex justify-between text-gray-300">
+                  <span>Thermal Resistance:</span>
+                  <strong className="text-white">Up to {currentSpec.breakdownTemp}°F</strong>
+                </div>
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setIsFlowing(!isFlowing)}
+                  className="flex-1 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-white flex items-center justify-center gap-1.5 transition"
+                >
+                  {isFlowing ? <Pause className="w-3.5 h-3.5 text-amber-400" /> : <Play className="w-3.5 h-3.5 text-amber-400" />}
+                  <span>{isFlowing ? "Pause Flow" : "Flow Oil Stream"}</span>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
         </div>
+      </MotionZoomPop>
+
+      {/* Packages Grid (STAGGERED CONTAINER) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <MotionStaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {packages.map((pkg, idx) => (
+            <MotionStaggerItem
+              key={idx}
+              className={`glass-card rounded-3xl p-7 sm:p-8 flex flex-col justify-between cursor-pointer border ${
+                activePlan === idx ? "border-amber-400/60 shadow-2xl shadow-amber-500/15" : "border-gray-800"
+              }`}
+              onClick={() => setActivePlan(idx)}
+            >
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">{pkg.title}</h3>
+                <div className="flex items-baseline gap-2 mb-3">
+                  <span className="text-3xl sm:text-4xl font-black text-amber-400">{pkg.price}</span>
+                  <span className="text-xs text-gray-400">/ est. {pkg.time}</span>
+                </div>
+                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed mb-6">
+                  {pkg.desc}
+                </p>
+
+                <ul className="space-y-2.5 border-t border-gray-800 pt-4">
+                  {pkg.features.map((f, fIdx) => (
+                    <li key={fIdx} className="flex items-start text-xs sm:text-sm text-gray-300 space-x-2">
+                      <CheckCircle2 className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-8 pt-4 border-t border-gray-800">
+                <Link
+                  href={`/get-quote?service=${encodeURIComponent(pkg.title)}`}
+                  className={`w-full py-3.5 rounded-xl text-center text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition ${
+                    activePlan === idx ? "gold-glow-btn" : "bg-gray-800 hover:bg-amber-500 hover:text-black text-gray-200"
+                  }`}
+                >
+                  <span>Select Package</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </MotionStaggerItem>
+          ))}
+        </MotionStaggerContainer>
       </section>
 
-    
-      <style jsx>{`
-        @keyframes animate-in {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        .animate-in {
-          animation: animate-in 0.6s ease-out;
-        }
-        
-        .animate-spin-slow {
-          animation: spin 20s linear infinite;
-        }
-        
-        @keyframes spin {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
     </div>
   );
-};
-
-export default OilChangeService;
+}
