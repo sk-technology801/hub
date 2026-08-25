@@ -18,6 +18,13 @@ const geistMono = localFont({
 export const metadata = {
   title: "SK HUB Auto Performance & Care | Master Automotive Engineering",
   description: "Premier automotive engineering, dealer-level diagnostics, ceramic brake overhauls, synthetic lubrication, and 24/7 roadside assistance by SK HUB.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({ children }) {

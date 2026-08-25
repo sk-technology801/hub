@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080c14" />
+      <stop offset="50%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#000000" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background Shield Container -->
+  <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#bgGrad)" stroke="url(#goldGrad)" stroke-width="3" />
+  
+  <!-- Subtle Amber Ambient Corner Glow -->
+  <circle cx="16" cy="16" r="14" fill="url(#glowGrad)" />
+
+  <!-- Speed Wing Cuts -->
+  <path d="M 12 18 L 26 18 L 22 24 L 12 24 Z" fill="#f59e0b" opacity="0.85" />
+  <path d="M 14 28 L 30 28 L 26 34 L 14 34 Z" fill="#fbbf24" />
+  <path d="M 16 38 L 34 38 L 30 44 L 16 44 Z" fill="#d97706" opacity="0.85" />
+
+  <!-- Bold SK Monogram -->
+  <text 
+    x="34" 
+    y="42" 
+    fill="#ffffff" 
+    font-size="24" 
+    font-weight="900" 
+    font-family="system-ui, -apple-system, sans-serif"
+    letter-spacing="-1"
+  >
+    SK
+  </text>
+
+  <!-- Small Gold Corner Accent Dot -->
+  <circle cx="50" cy="18" r="3" fill="#fbbf24" />
+</svg>
