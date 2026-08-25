@@ -6,6 +6,7 @@ import {
   Instagram, Youtube, ArrowRight, Gauge, ShieldCheck, 
   CheckCircle2, Sparkles 
 } from "lucide-react";
+import SkHubLogo from "./sk-hub-logo";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -32,7 +33,7 @@ const Footer = () => {
   ];
 
   const quickLinks = [
-    { label: "About HackMob", href: "/about" },
+    { label: "About SK HUB", href: "/about" },
     { label: "Diagnostic Center", href: "/diagnostic" },
     { label: "Transparent Pricing", href: "/pricing" },
     { label: "Customer Reviews", href: "/testimonials" },
@@ -59,7 +60,7 @@ const Footer = () => {
             <div className="text-center lg:text-left space-y-1">
               <div className="flex items-center justify-center lg:justify-start space-x-2 text-amber-400 text-xs font-bold uppercase tracking-wider">
                 <Sparkles className="w-4 h-4" />
-                <span>HackMob Club & Maintenance Insights</span>
+                <span>SK HUB Drivers Club & Maintenance Insights</span>
               </div>
               <h3 className="text-2xl font-bold text-white">
                 Get Exclusive Service Discounts & Seasonal Tips
@@ -106,19 +107,7 @@ const Footer = () => {
           
           {/* Col 1: Brand Info (4 cols) */}
           <div className="lg:col-span-4 space-y-5">
-            <Link href="/" className="flex items-center space-x-3 group inline-block">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 to-yellow-400 flex items-center justify-center shadow-lg shadow-amber-500/20">
-                <Gauge className="w-6 h-6 text-black" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-2xl font-black tracking-wider text-white">
-                  HACK<span className="text-amber-400">MOB</span>
-                </span>
-                <span className="text-[10px] uppercase tracking-widest text-gray-400 font-semibold -mt-1">
-                  Auto Performance & Care
-                </span>
-              </div>
-            </Link>
+            <SkHubLogo size="lg" />
 
             <p className="text-sm text-gray-400 leading-relaxed max-w-sm">
               Your premier dealership alternative for computerized diagnostics, high-performance tuning, and certified preventative maintenance backed by a 24-month warranty.
@@ -215,8 +204,8 @@ const Footer = () => {
 
               <div className="flex items-center space-x-3">
                 <Mail className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                <a href="mailto:service@hackmobauto.com" className="hover:text-white transition">
-                  service@hackmobauto.com
+                <a href="mailto:service@skhubauto.com" className="hover:text-white transition">
+                  service@skhubauto.com
                 </a>
               </div>
 
@@ -237,7 +226,7 @@ const Footer = () => {
       {/* Bottom Copyright Bar */}
       <div className="border-t border-gray-800/80 bg-black/70 py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500">
-          <p>© {new Date().getFullYear()} HackMob Auto Services. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} SK HUB Auto Services. All rights reserved.</p>
           <div className="flex flex-wrap items-center gap-6">
             {legalLinks.map((item) => (
               <Link key={item.href} href={item.href} className="hover:text-amber-400 transition">

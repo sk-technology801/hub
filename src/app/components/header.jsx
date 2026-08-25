@@ -8,6 +8,7 @@ import {
   HelpCircle, AlertTriangle, Zap
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import SkHubLogo from "./sk-hub-logo";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -93,23 +94,8 @@ const Header = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             
-            {/* Logo with pulsating halo ring */}
-            <Link href="/" className="flex items-center space-x-3 group">
-              <div className="relative">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 via-amber-500 to-yellow-400 flex items-center justify-center shadow-lg shadow-amber-500/25 group-hover:scale-105 group-hover:shadow-amber-500/40 transition-all duration-300">
-                  <Gauge className="w-6 h-6 text-black" />
-                </div>
-                <div className="absolute inset-0 rounded-xl bg-amber-400 opacity-20 blur-sm group-hover:opacity-40 transition-opacity" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl sm:text-2xl font-black tracking-wider text-white font-sans flex items-center">
-                  HACK<span className="text-amber-400">MOB</span>
-                </span>
-                <span className="text-[10px] uppercase tracking-widest text-gray-400 font-semibold -mt-1">
-                  Auto Performance & Care
-                </span>
-              </div>
-            </Link>
+            {/* SK HUB Brand Logo */}
+            <SkHubLogo size="md" />
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-1 xl:space-x-2">
@@ -152,7 +138,7 @@ const Header = () => {
                       </div>
                       
                       <div className="grid grid-cols-1 gap-1.5 mt-2">
-                        {services.map((item, idx) => {
+                        {services.map((item) => {
                           const Icon = item.icon;
                           return (
                             <Link 

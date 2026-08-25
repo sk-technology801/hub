@@ -16,8 +16,8 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: "HackMob Auto Performance & Care | Master Automotive Engineering",
-  description: "Premier automotive engineering, dealer-level diagnostics, ceramic brake overhauls, synthetic lubrication, and 24/7 roadside assistance.",
+  title: "SK HUB Auto Performance & Care | Master Automotive Engineering",
+  description: "Premier automotive engineering, dealer-level diagnostics, ceramic brake overhauls, synthetic lubrication, and 24/7 roadside assistance by SK HUB.",
 };
 
 export default function RootLayout({ children }) {
